@@ -7,7 +7,7 @@ Ray::Ray(point3D o, directional_vector d){
     direction = d;
 }
 
-point3D Ray::trace_rays(float t){
+point3D Ray::trace_ray(float t){
     segment_vector distance = direction.multiply_directional_vector(t);
     point3D traced_point = origin;
     traced_point.x = origin.x + distance.p2.x;

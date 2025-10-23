@@ -45,6 +45,7 @@ std::array<directional_vector, 2> create_viewport_vectors(directional_vector v);
 
 segment_vector cross_product(const directional_vector& v1, const directional_vector& v2);
 float dot_product(const directional_vector& v1, const segment_vector& v2);
+float dot_product(const segment_vector&v1, const segment_vector& v2);
 float magnitude_of_segment_vector(const segment_vector& v);
 
 #endif
