@@ -11,5 +11,7 @@ class Ray{
         point3D trace_rays(float t);
         directional_vector reflection(Objects object);
         directional_vector refraction(Objects object);
+        point3D O();
+        directional_vector D();
 };
 #endif

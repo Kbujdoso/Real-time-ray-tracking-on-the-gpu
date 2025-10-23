@@ -6,3 +6,4 @@ Surface::Surface(Color val_color, float val_shinness, float val_reflectivity){
     shinness = val_shinness;
     reflectivity = val_reflectivity;
 }
+Surface::Surface(){}

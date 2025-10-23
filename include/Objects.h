@@ -8,11 +8,12 @@ class Objects{
         float refraction;
         point3D coordinate; 
         Surface surface;
-        Surface get_surface();
-        point3D get_coordinate();
-        float get_refraction();
-        float get_reflection();
-    public:
+public:
+        Surface S();
+        point3D C();
+        float Re();
+        float Ra();
+        Objects();
         Objects(point3D coordinate, Surface surface, float refraction, float reflection);
         virtual ~Objects() {}
 };
@@ -20,12 +21,12 @@ class Objects{
 
 class Plane : public Objects{ 
     private: 
-        directional_vector U;
-        directional_vector V;
+        directional_vector u;
+        directional_vector v;
     public:
         Plane(directional_vector U, directional_vector V, point3D coordinate, Surface surface, float refraction, float reflection);
-        directional_vector get_U();
-        directional_vector get_V();
+        directional_vector U();
+        directional_vector V();
 };
 
 class Sphere : public Objects{
@@ -33,7 +34,7 @@ class Sphere : public Objects{
         float r; 
     public: 
         Sphere(float r, point3D coordinate, Surface surface, float refraction, float reflection);
-        float get_radius();
+        float R();
 
 };
 #endif

@@ -17,6 +17,9 @@ struct point3D{
 struct segment_vector{
     point3D p1;
     point3D p2;
+    float dx; 
+    float dy; 
+    float dz;
         segment_vector();
         segment_vector(point3D p1, point3D p2);
         segment_vector add_vector(segment_vector v);       
@@ -25,8 +28,8 @@ struct segment_vector{
         point3D add_vector_to_point(segment_vector v);
     };
     
-    struct directional_vector{
-        float x;
+struct directional_vector{
+    float x;
     float y; 
     float z;
     directional_vector();
@@ -41,6 +44,7 @@ point3D operator*(point3D p, float scalar);
 std::array<directional_vector, 2> create_viewport_vectors(directional_vector v);
 
 segment_vector cross_product(const directional_vector& v1, const directional_vector& v2);
+float dot_product(const directional_vector& v1, const segment_vector& v2);
 float magnitude_of_segment_vector(const segment_vector& v);
 
 #endif

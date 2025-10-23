@@ -14,6 +14,9 @@ segment_vector::segment_vector() : p1(point3D()), p2(point3D()){}
 segment_vector::segment_vector(point3D p1_val, point3D p2_val){
     p1 = p1_val;
     p2 = p2_val;
+    dx = abs(p1.x - p2.x);
+    dy = abs(p1.y - p2.y);
+    dz = abs(p1.z - p2.z);
 }
 
 directional_vector segment_vector::normalize_vector(){
@@ -111,4 +114,7 @@ point3D operator*(point3D p, float scalar){
     return point3D(p.x * scalar, p.y * scalar, p.z *scalar);
 }
 
+float dot_product(const directional_vector& v1, const segment_vector& v2){
+    return v1.x * v2.dx + v1.y * v2.dy + v1.z * v2.dz;
+}
 

@@ -6,6 +6,7 @@ class Surface{
         Color color;
         float shinness;
         float reflectivity;
+        Surface();
         Surface(Color color, float shinness, float reflectivity);
 };
 #endif
