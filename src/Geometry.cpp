@@ -95,13 +95,17 @@ std::array<directional_vector,2> create_viewport_vectors(const directional_vecto
     return {t1, t2};
 }
 
-point3D directional_vector::operator/(float scalar) const {
-    return point3D(x / scalar, y / scalar, z / scalar);
-}
+
 
 
 point3D operator+(point3D p,  directional_vector v){
     return point3D(p.x + v.x, p.y + v.y, p.z + v.z);
+}
+point3D operator-(point3D p,  directional_vector v){
+    return point3D(p.x - v.x, p.y - v.y, p.z - v.z);
+}
+point3D operator/(directional_vector v, float scalar){
+    return point3D(v.x / scalar, v.y / scalar, v.z / scalar);
 }
 
 

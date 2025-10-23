@@ -18,6 +18,8 @@ void Renderer::render(){
     float image_height = camera.get_image_height();
     float image_width = camera.get_image_width();
     point3D coordinate = camera.get_coordinate();
-    point3D viewport_up_left = coordinate + direction + up - right; 
+    point3D viewport_center = coordinate + direction;
+    point3D viewport_left_up = viewport_center + (up / 2.0) - (right / 2.0);
+    
 
 }

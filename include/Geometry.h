@@ -32,16 +32,11 @@ struct segment_vector{
     directional_vector();
     directional_vector(point3D p);
     segment_vector multiply_directional_vector(float x);
-    point3D operator/(float scalar) const;
 };
 
-point3D operator+(point3D p,  directional_vector v){
-    return point3D(p.x + v.x, p.y + v.y, p.z + v.z);
-}
-point3D operator-(point3D p,  directional_vector v){
-    return point3D(p.x - v.x, p.y - v.y, p.z - v.z);
-}
-
+point3D operator+(point3D p, directional_vector v);
+point3D operator-(point3D p, directional_vector v);
+point3D operator/(directional_vector v, float scalar);
 std::array<directional_vector, 2> create_viewport_vectors(directional_vector v);
 
 segment_vector cross_product(const directional_vector& v1, const directional_vector& v2);
