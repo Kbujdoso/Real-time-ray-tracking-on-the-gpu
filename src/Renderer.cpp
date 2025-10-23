@@ -20,6 +20,14 @@ void Renderer::render(){
     point3D coordinate = camera.get_coordinate();
     point3D viewport_center = coordinate + direction;
     point3D viewport_left_up = viewport_center + (up / 2.0) - (right / 2.0);
-    
+    point3D one_pixel_right = right / image_width;
+    point3D one_pixel_down = up / image_height;
+
+    for(int i = 0;i < image_width; i++){
+        for (int j = 0; j < image_height; j++){
+            directional_vector ray_direction = directional_vector(viewport_left_up + one_pixel_right*i - one_pixel_down * j);
+            Ray ray = Ray(coordinate, ray_direction);
+        }
+    }
 
 }
