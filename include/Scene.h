@@ -18,8 +18,8 @@ class Scene{
         Scene(std::vector<Objects> objects, std::vector<Light> lights);
         Scene();
         std::optional<point3D> sphere_intersection_test(Ray ray, Sphere sphere); 
-        std::optional<std::pair<Objects, point3D>> rectangle_intersection_test(Ray ray); 
-        std::optional<std::pair<Objects, point3D>> infinite_plane_intersection_test(Ray ray); 
+        std::optional<point3D> rectangle_intersection_test(Ray ray, Rectangle rectangle); 
+        std::optional<point3D> infinite_plane_intersection_test(Ray ray, Infinite_Plane infinite_plane); 
         void add_object(Objects object);
         void remove_object(Objects object);
         std::vector<Objects> get_Objects();

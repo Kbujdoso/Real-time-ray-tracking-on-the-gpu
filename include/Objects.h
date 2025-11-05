@@ -18,13 +18,23 @@ public:
         virtual ~Objects() {}
 };
 
+class Infinite_Plane : public Objects {
+    private: 
+        directional_vector direction;
+        directional_vector normal_vector;
+    public:
+    Infinite_Plane();
+    Infinite_Plane(point3D coordinate, Surface surface, float refraction, float reflection, directional_vector direction, directional_vector normal_vector);
+    directional_vector D();
+    directional_vector N();
+};
 
-class Plane : public Objects{ 
+class Rectangle : public Objects{ 
     private: 
         directional_vector u;
         directional_vector v;
     public:
-        Plane(directional_vector U, directional_vector V, point3D coordinate, Surface surface, float refraction, float reflection);
+        Rectangle(directional_vector U, directional_vector V, point3D coordinate, Surface surface, float refraction, float reflection);
         directional_vector U();
         directional_vector V();
 };

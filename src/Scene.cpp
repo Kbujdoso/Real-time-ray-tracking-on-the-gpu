@@ -47,7 +47,19 @@ std::optional<point3D> sphere_intersection_test(Ray ray, Sphere sphere){
         {
             return std::nullopt;
         }
+    }   
+}
+std::optional<point3D> infinite_plane_intersection_test(Ray ray, Infinite_Plane infinite_plane){
+    bool parallel = fabs(dot_product(ray.D(), infinite_plane.N())) < 1e-6f;
+    if(parallel){
+        return std::nullopt;
+    } else {
+        segment_vector CO_vector = segment_vector(infinite_plane.C() ,ray.O()); 
+        float t = dot_product(infinite_plane.N(), CO_vector)/dot_product(ray.D(), infinite_plane.N());
+        if (t < 0 ){
+            return std::nullopt;
+        } else {
+            return ray.trace_ray(t); 
+        }
     }
-    
-
 }
