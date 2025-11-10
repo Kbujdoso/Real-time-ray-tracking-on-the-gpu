@@ -40,7 +40,7 @@ directional_vector Infinite_Plane::N(){
     return normal_vector;
 }
 
-Rectangle::Rectangle(directional_vector U, directional_vector V, point3D c, Surface s, float re, float ra){
+Rectangle::Rectangle(segment_vector U, segment_vector V, point3D c, Surface s, float re, float ra){
     u = U;
     v = V; 
     coordinate = c; 
@@ -48,10 +48,10 @@ Rectangle::Rectangle(directional_vector U, directional_vector V, point3D c, Surf
     reflection = re;
     refraction = ra;
 }
-directional_vector Rectangle::U(){
+segment_vector Rectangle::U(){
     return u; 
 }
-directional_vector Rectangle::V(){
+segment_vector Rectangle::V(){
     return v;
 }
 Sphere::Sphere(float R, point3D c, Surface s, float re, float ra){

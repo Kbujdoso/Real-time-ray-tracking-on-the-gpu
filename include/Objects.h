@@ -31,12 +31,12 @@ class Infinite_Plane : public Objects {
 
 class Rectangle : public Objects{ 
     private: 
-        directional_vector u;
-        directional_vector v;
+        segment_vector u;
+        segment_vector v;
     public:
-        Rectangle(directional_vector U, directional_vector V, point3D coordinate, Surface surface, float refraction, float reflection);
-        directional_vector U();
-        directional_vector V();
+        Rectangle(segment_vector U, segment_vector V, point3D coordinate, Surface surface, float refraction, float reflection);
+        segment_vector U();
+        segment_vector V();
 };
 
 class Sphere : public Objects{

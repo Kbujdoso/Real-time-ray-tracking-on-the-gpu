@@ -50,7 +50,9 @@ segment_vector segment_vector::add_vector(segment_vector v){
     return segment_vector(p1, p3);
 }
 
-
+segment_vector segment_vector::abs_vector(){
+    
+}
 
 
 
@@ -110,6 +112,7 @@ point3D operator-(point3D p,  directional_vector v){
 point3D operator/(directional_vector v, float scalar){
     return point3D(v.x / scalar, v.y / scalar, v.z / scalar);
 }
+
 point3D operator*(point3D p, float scalar){
     return point3D(p.x * scalar, p.y * scalar, p.z *scalar);
 }

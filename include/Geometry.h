@@ -26,6 +26,7 @@ struct segment_vector{
         segment_vector multiply_segment_vector(float x);
         directional_vector normalize_vector();
         point3D add_vector_to_point(segment_vector v);
+        segment_vector abs_vector();
     };
     
 struct directional_vector{

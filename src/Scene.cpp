@@ -20,7 +20,7 @@ Scene::Scene(){
     lights = {};
 }
 
-std::optional<point3D> sphere_intersection_test(Ray ray, Sphere sphere){
+std::optional<point3D> Scene::sphere_intersection_test(Ray ray, Sphere sphere){
     float a = 1;
     segment_vector OC_vector = segment_vector(ray.O(), sphere.C());
     float b = dot_product(ray.D(), OC_vector);
@@ -49,7 +49,7 @@ std::optional<point3D> sphere_intersection_test(Ray ray, Sphere sphere){
         }
     }   
 }
-std::optional<point3D> infinite_plane_intersection_test(Ray ray, Infinite_Plane infinite_plane){
+std::optional<point3D> Scene::infinite_plane_intersection_test(Ray ray, Infinite_Plane infinite_plane){
     bool parallel = fabs(dot_product(ray.D(), infinite_plane.N())) < 1e-6f;
     if(parallel){
         return std::nullopt;
@@ -62,4 +62,11 @@ std::optional<point3D> infinite_plane_intersection_test(Ray ray, Infinite_Plane 
             return ray.trace_ray(t); 
         }
     }
+}
+
+std::optional<point3D> Scene::rectangle_intersection_test(Ray ray, Rectangle rectangle){
+    directional_vector u = rectangle.U().normalize_vector();
+    directional_vector v = rectangle.V().normalize_vector();
+    directional_vector normal_vector = cross_product(u, v).normalize_vector();
+
 }
