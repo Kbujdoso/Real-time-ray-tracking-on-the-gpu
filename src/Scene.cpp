@@ -65,8 +65,8 @@ std::optional<point3D> Scene::infinite_plane_intersection_test(Ray ray, Infinite
 }
 
 std::optional<point3D> Scene::rectangle_intersection_test(Ray ray, Rectangle rectangle){
-    directional_vector u = rectangle.U().normalize_vector();
-    directional_vector v = rectangle.V().normalize_vector();
-    directional_vector normal_vector = cross_product(u, v).normalize_vector();
+    segment_vector u = rectangle.U();
+    segment_vector v = rectangle.V();
+    directional_vector n = rectangle.N();
 
 }
