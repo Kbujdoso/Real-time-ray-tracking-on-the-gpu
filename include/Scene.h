@@ -18,6 +18,8 @@ struct Intersection_data{
     public:
         Intersection_data();
         Intersection_data(Surface S, point3D P);
+        Surface Surface_data();
+        point3D P();
 };
 class Scene{
     private: 
@@ -28,8 +30,8 @@ class Scene{
     public:
         Scene(std::vector<Objects*> objects, std::vector<Light> lights);
         Scene();
-        std::optional<Intersection_data> sphere_intersection_test(Ray ray, Sphere sphere); 
-        std::optional<Intersection_data> rectangle_intersection_test(Ray ray, Rectangle rectangle); 
+        std::optional<Intersection_data> sphere_intersection_test(Ray& ray, Sphere& sphere); 
+        std::optional<Intersection_data> rectangle_intersection_test(Ray& ray, Rectangle& rectangle); 
         std::optional<Intersection_data> infinite_plane_intersection_test(Ray ray, Infinite_Plane infinite_plane);
         std::optional<Color> trace(Ray ray); 
         void add_object(Objects object);

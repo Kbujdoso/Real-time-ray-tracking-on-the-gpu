@@ -10,6 +10,20 @@
 #include "Objects.h"
 #include <cmath>
 
+
+Intersection_data::Intersection_data(){
+}
+Intersection_data::Intersection_data(Surface S, point3D P){
+    surface = S;
+    p = P;
+}
+Surface Intersection_data::Surface_data(){
+    return surface;
+}
+point3D Intersection_data::P(){
+    return p;
+}
+
 Scene::Scene(std::vector<Objects*> Objects, std::vector<Light> Lights) {
     objects = Objects;
     lights = Lights;
@@ -20,7 +34,7 @@ Scene::Scene(){
     lights = {};
 }
 
-std::optional<Intersection_data> Scene::sphere_intersection_test(Ray ray, Sphere sphere){
+std::optional<Intersection_data> Scene::sphere_intersection_test(Ray& ray, Sphere& sphere){
     float a = 1;
     segment_vector OC_vector = segment_vector(ray.O(), sphere.C());
     float b = dot_product(ray.D(), OC_vector);
@@ -64,7 +78,7 @@ std::optional<Intersection_data> Scene::infinite_plane_intersection_test(Ray ray
     }
 }
 
-std::optional<Intersection_data> Scene::rectangle_intersection_test(Ray ray, Rectangle rectangle){
+std::optional<Intersection_data> Scene::rectangle_intersection_test(Ray& ray, Rectangle& rectangle){
     segment_vector u = rectangle.U();
     segment_vector v = rectangle.V();
     directional_vector n = rectangle.N();
@@ -91,19 +105,36 @@ std::optional<Intersection_data> Scene::rectangle_intersection_test(Ray ray, Rec
     }
 }
 std::optional<Color> Scene::trace(Ray ray){
-for (auto& obj : objects) {
-switch (obj->type())
-{
-case ObjectType::Rectangle:
-    //
-    break;
-case ObjectType::Sphere:
-    //
-    break;
-case ObjectType::Infinite_plane:
-    //
-    break;
-}
-}
+    for (auto& obj : objects) {
+        switch (obj->type())
+        {
+        case ObjectType::Rectangle:
+            auto* r = static_cast<Rectangle*>(obj); 
+            auto opt_result = rectangle_intersection_test(ray, *r);
+            if(opt_result){
+                Intersection_data result = *opt_result;
+                return result.Surface_data().Surface_color(); 
+            }
+            break;
+        case ObjectType::Sphere:
+            auto* s = static_cast<Sphere*>(obj);
+            auto opt_result = sphere_intersection_test(ray, *s);
+            if (opt_result){
+                Intersection_data result = *opt_result;
+                return result.Surface_data().Surface_color();
+            }
+            break;
+        case ObjectType::Infinite_plane:
+            auto* i = static_cast<Infinite_Plane*>(obj);
+            auto opt_result = infinite_plane_intersection_test(ray, *i);
+            if (opt_result){
+                Intersection_data result = *opt_result;
+                return result.Surface_data().Surface_color();
+            }
+
+            break;
+        }
+    }
+    return std::nullopt;
 }
 
