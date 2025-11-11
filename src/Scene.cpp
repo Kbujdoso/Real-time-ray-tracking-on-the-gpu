@@ -10,7 +10,7 @@
 #include "Objects.h"
 #include <cmath>
 
-Scene::Scene(std::vector<Objects> Objects, std::vector<Light> Lights) {
+Scene::Scene(std::vector<Objects*> Objects, std::vector<Light> Lights) {
     objects = Objects;
     lights = Lights;
 }
@@ -89,5 +89,21 @@ std::optional<Intersection_data> Scene::rectangle_intersection_test(Ray ray, Rec
             else { return std::nullopt;}
         }
     }
-
 }
+std::optional<Color> Scene::trace(Ray ray){
+for (auto& obj : objects) {
+switch (obj->type())
+{
+case ObjectType::Rectangle:
+    //
+    break;
+case ObjectType::Sphere:
+    //
+    break;
+case ObjectType::Infinite_plane:
+    //
+    break;
+}
+}
+}
+

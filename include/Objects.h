@@ -2,6 +2,7 @@
 #define OBJECTS_H
 #include "Geometry.h"
 #include "Surface.h"
+#include "ENUMS.h"
 class Objects{
     protected:
         float reflection;
@@ -16,6 +17,7 @@ public:
         Objects();
         Objects(point3D coordinate, Surface surface, float refraction, float reflection);
         virtual ~Objects() {}
+        virtual ObjectType type();
 };
 
 class Infinite_Plane : public Objects {
@@ -27,6 +29,7 @@ class Infinite_Plane : public Objects {
     Infinite_Plane(point3D coordinate, Surface surface, float refraction, float reflection, directional_vector direction, directional_vector normal_vector);
     directional_vector D();
     directional_vector N();
+    ObjectType type() override;
 };
 
 class Rectangle : public Objects{ 
@@ -39,6 +42,8 @@ class Rectangle : public Objects{
         segment_vector U();
         segment_vector V();
         directional_vector N();
+        ObjectType type() override;
+
 };
 
 class Sphere : public Objects{
@@ -47,8 +52,11 @@ class Sphere : public Objects{
     public: 
         Sphere(float r, point3D coordinate, Surface surface, float refraction, float reflection);
         float R();
+        ObjectType type() override;
+
 
 };
+
 #endif
 
 
