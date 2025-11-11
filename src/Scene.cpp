@@ -20,7 +20,7 @@ Scene::Scene(){
     lights = {};
 }
 
-std::optional<point3D> Scene::sphere_intersection_test(Ray ray, Sphere sphere){
+std::optional<Intersection_data> Scene::sphere_intersection_test(Ray ray, Sphere sphere){
     float a = 1;
     segment_vector OC_vector = segment_vector(ray.O(), sphere.C());
     float b = dot_product(ray.D(), OC_vector);
@@ -32,24 +32,24 @@ std::optional<point3D> Scene::sphere_intersection_test(Ray ray, Sphere sphere){
     } else 
     if (discriminant = 0){ //only one real solution for the polinom
         float t = -1*(b/(2*a));
-        return ray.trace_ray(t);
+            return Intersection_data(sphere.S() ,ray.trace_ray(t)); 
     } 
     else //two real solutions for the polinom we need the the smaller and greater than 0 else its behind the camera
     {
         float t1 = -b+sqrt(discriminant)/(2*a);
         float t2 = -b-sqrt(discriminant)/(2*a);
         if (t1 > 0 && t1 < t2){
-            return ray.trace_ray(t1);
+            return Intersection_data(sphere.S() ,ray.trace_ray(t1)); 
         } else 
         if (t2 > 0 && t2 < t1){
-            return ray.trace_ray(t2);
+            return Intersection_data(sphere.S() ,ray.trace_ray(t2)); 
         } else 
         {
             return std::nullopt;
         }
     }   
 }
-std::optional<point3D> Scene::infinite_plane_intersection_test(Ray ray, Infinite_Plane infinite_plane){
+std::optional<Intersection_data> Scene::infinite_plane_intersection_test(Ray ray, Infinite_Plane infinite_plane){
     bool parallel = std::fabs(dot_product(ray.D(), infinite_plane.N())) < 1e-6f;
     if(parallel){ //if its paralel there is no intersection
         return std::nullopt;
@@ -59,12 +59,12 @@ std::optional<point3D> Scene::infinite_plane_intersection_test(Ray ray, Infinite
         if (t < 0 ){ // if t < 0 the object is behind the camera
             return std::nullopt;
         } else { // if not we trace the ray and returnthe point
-            return ray.trace_ray(t); 
+            return Intersection_data(infinite_plane.S() ,ray.trace_ray(t)); 
         }
     }
 }
 
-std::optional<point3D> Scene::rectangle_intersection_test(Ray ray, Rectangle rectangle){
+std::optional<Intersection_data> Scene::rectangle_intersection_test(Ray ray, Rectangle rectangle){
     segment_vector u = rectangle.U();
     segment_vector v = rectangle.V();
     directional_vector n = rectangle.N();
@@ -84,7 +84,7 @@ std::optional<point3D> Scene::rectangle_intersection_test(Ray ray, Rectangle rec
             float u_proj = dot_product(w, rectangle.U())/dot_product(rectangle.U(), rectangle.U());
             float v_proj = dot_product(w, rectangle.V())/dot_product(rectangle.V(), rectangle.V());
             if(0 <= u_proj && 1 >= u_proj && 0 <= v_proj && 1 >= v_proj){
-                return P;
+            return Intersection_data(rectangle.S() ,P); 
             }
             else { return std::nullopt;}
         }
