@@ -47,7 +47,7 @@ Rectangle::Rectangle(segment_vector U, segment_vector V, point3D c, Surface s, f
     surface = s; 
     reflection = re;
     refraction = ra;
-    n = (cross_product(U.normalize_vector(), V.normalize_vector())).normalize_vector();
+    normal_vector = (cross_product(U.normalize_vector(), V.normalize_vector())).normalize_vector();
 }
 segment_vector Rectangle::U(){
     return u; 
@@ -56,7 +56,7 @@ segment_vector Rectangle::V(){
     return v;
 }
 directional_vector Rectangle::N(){
-    return n; 
+    return normal_vector; 
 }
 Sphere::Sphere(float R, point3D c, Surface s, float re, float ra){
     r = R;

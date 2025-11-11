@@ -33,7 +33,7 @@ class Rectangle : public Objects{
     private: 
         segment_vector u;
         segment_vector v;
-        directional_vector n; 
+        directional_vector normal_vector; 
     public:
         Rectangle(segment_vector U, segment_vector V, point3D coordinate, Surface surface, float refraction, float reflection);
         segment_vector U();

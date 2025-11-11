@@ -27,14 +27,14 @@ std::optional<point3D> Scene::sphere_intersection_test(Ray ray, Sphere sphere){
     float r = sphere.R();
     float c = dot_product(OC_vector, OC_vector) - r*r;
     float discriminant = b*b - 4*a*c;
-    if (discriminant < 0){
+    if (discriminant < 0){ //we check for the discriminant if discriminant < 0 there is no real solution for the polinom
         return std::nullopt; 
     } else 
-    if (discriminant = 0){
+    if (discriminant = 0){ //only one real solution for the polinom
         float t = -1*(b/(2*a));
         return ray.trace_ray(t);
     } 
-    else 
+    else //two real solutions for the polinom we need the the smaller and greater than 0 else its behind the camera
     {
         float t1 = -b+sqrt(discriminant)/(2*a);
         float t2 = -b-sqrt(discriminant)/(2*a);
@@ -50,15 +50,15 @@ std::optional<point3D> Scene::sphere_intersection_test(Ray ray, Sphere sphere){
     }   
 }
 std::optional<point3D> Scene::infinite_plane_intersection_test(Ray ray, Infinite_Plane infinite_plane){
-    bool parallel = fabs(dot_product(ray.D(), infinite_plane.N())) < 1e-6f;
-    if(parallel){
+    bool parallel = std::fabs(dot_product(ray.D(), infinite_plane.N())) < 1e-6f;
+    if(parallel){ //if its paralel there is no intersection
         return std::nullopt;
-    } else {
+    } else { //if its not parallel then we start calculating the intersection
         segment_vector CO_vector = segment_vector(infinite_plane.C() ,ray.O()); 
         float t = dot_product(infinite_plane.N(), CO_vector)/dot_product(ray.D(), infinite_plane.N());
-        if (t < 0 ){
+        if (t < 0 ){ // if t < 0 the object is behind the camera
             return std::nullopt;
-        } else {
+        } else { // if not we trace the ray and returnthe point
             return ray.trace_ray(t); 
         }
     }
@@ -68,5 +68,26 @@ std::optional<point3D> Scene::rectangle_intersection_test(Ray ray, Rectangle rec
     segment_vector u = rectangle.U();
     segment_vector v = rectangle.V();
     directional_vector n = rectangle.N();
+        bool parallel = std::fabs(dot_product(ray.D(), rectangle.N())) < 1e-6f;
+    if(parallel){ //if its parallel there is no intersection
+        return std::nullopt;
+    } 
+    else { //if not parallel we start calculating the intersection by starting calculating the intersection with the infinite plane
+        segment_vector CO_vector = segment_vector(rectangle.C() ,ray.O()); 
+        float t = dot_product(rectangle.N(), CO_vector)/dot_product(ray.D(), rectangle.N());
+        if (t < 0 ){ // if t < 0 then the object is behind the camera
+            return std::nullopt;
+        } 
+        else{ //if not behind we calculate if it intersect not just the infinate plane but the rectangle
+            point3D P = ray.trace_ray(t);
+            segment_vector w = segment_vector(P, rectangle.C());
+            float u_proj = dot_product(w, rectangle.U())/dot_product(rectangle.U(), rectangle.U());
+            float v_proj = dot_product(w, rectangle.V())/dot_product(rectangle.V(), rectangle.V());
+            if(0 <= u_proj && 1 >= u_proj && 0 <= v_proj && 1 >= v_proj){
+                return P;
+            }
+            else { return std::nullopt;}
+        }
+    }
 
 }
