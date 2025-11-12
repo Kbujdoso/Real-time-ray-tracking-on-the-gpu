@@ -46,17 +46,17 @@ std::optional<Intersection_data> Scene::sphere_intersection_test(Ray& ray, Spher
     } else 
     if (discriminant = 0){ //only one real solution for the polinom
         float t = -1*(b/(2*a));
-            return Intersection_data(sphere.S() ,ray.trace_ray(t)); 
+            return Intersection_data(sphere.Surface_data() ,ray.trace_ray(t)); 
     } 
     else //two real solutions for the polinom we need the the smaller and greater than 0 else its behind the camera
     {
         float t1 = -b+sqrt(discriminant)/(2*a);
         float t2 = -b-sqrt(discriminant)/(2*a);
         if (t1 > 0 && t1 < t2){
-            return Intersection_data(sphere.S() ,ray.trace_ray(t1)); 
+            return Intersection_data(sphere.Surface_data() ,ray.trace_ray(t1)); 
         } else 
         if (t2 > 0 && t2 < t1){
-            return Intersection_data(sphere.S() ,ray.trace_ray(t2)); 
+            return Intersection_data(sphere.Surface_data() ,ray.trace_ray(t2)); 
         } else 
         {
             return std::nullopt;
@@ -73,7 +73,7 @@ std::optional<Intersection_data> Scene::infinite_plane_intersection_test(Ray ray
         if (t < 0 ){ // if t < 0 the object is behind the camera
             return std::nullopt;
         } else { // if not we trace the ray and returnthe point
-            return Intersection_data(infinite_plane.S() ,ray.trace_ray(t)); 
+            return Intersection_data(infinite_plane.Surface_data() ,ray.trace_ray(t)); 
         }
     }
 }
@@ -98,7 +98,7 @@ std::optional<Intersection_data> Scene::rectangle_intersection_test(Ray& ray, Re
             float u_proj = dot_product(w, rectangle.U())/dot_product(rectangle.U(), rectangle.U());
             float v_proj = dot_product(w, rectangle.V())/dot_product(rectangle.V(), rectangle.V());
             if(0 <= u_proj && 1 >= u_proj && 0 <= v_proj && 1 >= v_proj){
-            return Intersection_data(rectangle.S() ,P); 
+            return Intersection_data(rectangle.Surface_data() ,P); 
             }
             else { return std::nullopt;}
         }

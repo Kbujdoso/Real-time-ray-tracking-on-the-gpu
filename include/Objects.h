@@ -10,7 +10,7 @@ class Objects{
         point3D coordinate; 
         Surface surface;
 public:
-        Surface S();
+        Surface Surface_data();
         point3D C();
         float Re();
         float Ra();

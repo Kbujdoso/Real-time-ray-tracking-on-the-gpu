@@ -1,11 +1,15 @@
 #ifndef COLOR_H
 #define COLOR_H
 class Color{
-    public: 
+    private:
         int red;
-        int blue;
+        int blue; 
         int green;
+    public: 
         Color();
         Color(int red, int blue, int green);
+        int Red();
+        int Blue();
+        int Green();
 };
 #endif

@@ -11,7 +11,7 @@ Objects::Objects(point3D c, Surface s, float ra, float re){
 }
 Objects::Objects(){}
 
-Surface Objects::S(){
+Surface Objects::Surface_data(){
     return surface;
 }
 point3D Objects::C(){

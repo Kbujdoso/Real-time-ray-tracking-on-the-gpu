@@ -1,6 +1,9 @@
 #include "Renderer.h"
 #include <array>
 #include "Geometry.h"
+#include "Scene.h"
+#include <fstream>
+#include <algorithm>
 Renderer::Renderer(const Camera& c, const Scene& s, const Resolution& r){
     camera = c;
     scene = s;
@@ -22,12 +25,29 @@ void Renderer::render(){
     point3D viewport_left_up = viewport_center + (up / 2.0) - (right / 2.0);
     point3D one_pixel_right = right / image_width;
     point3D one_pixel_down = up / image_height;
+    std::ofstream out("output.ppm");
+    out << "P3\n" << image_width << " " << image_height << "\n255\n";
 
-    for(int i = 0;i < image_width; i++){
-        for (int j = 0; j < image_height; j++){
+    for(int i = 0;i < image_width; i++)
+    {
+        for (int j = 0; j < image_height; j++)
+        {
             directional_vector ray_direction = directional_vector(viewport_left_up + one_pixel_right*i - one_pixel_down * j);
             Ray ray = Ray(coordinate, ray_direction);
-        }
-    }
+            auto opt_pixel_color = scene.trace(ray);
+            Color pixel_color;
+            if (opt_pixel_color) {
+                pixel_color = *opt_pixel_color; 
+            } else {
+                pixel_color = Color();
+            }
 
+            int r = std::clamp(int(pixel_color.Red() * 255), 0, 255);
+            int g = std::clamp(int(pixel_color.Green() * 255), 0, 255);
+            int b = std::clamp(int(pixel_color.Blue() * 255), 0, 255);
+
+            out << r << " " << g << " " << b << "\n";
+        }
+
+    }
 }
