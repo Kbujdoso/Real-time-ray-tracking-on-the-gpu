@@ -14,16 +14,12 @@ segment_vector::segment_vector() : p1(point3D()), p2(point3D()){}
 segment_vector::segment_vector(point3D p1_val, point3D p2_val){
     p1 = p1_val;
     p2 = p2_val;
-    dx = p1.x - p2.x;
-    dy = p1.y - p2.y;
-    dz = p1.z - p2.z;
+    dx = p2.x - p1.x;
+    dy = p2.y - p1.y;
+    dz = p2.z - p1.z;
 }
 
 directional_vector segment_vector::normalize_vector(){
-    float dx = p2.x - p1.x;
-    float dy = p2.y - p1.y;
-    float dz = p2.z - p1.z;
-
     float magnitude = std::sqrt(dx*dx + dy*dy + dz*dz);
     if (magnitude != 0){
         dx = dx / magnitude;
@@ -35,13 +31,13 @@ directional_vector segment_vector::normalize_vector(){
 }
 
 segment_vector segment_vector::multiply_segment_vector(float scalar){
-    float x_temp = (p2.x - p1.x) * scalar + p1.x;
-    float y_temp = (p2.y - p1.y) * scalar + p1.y;
-    float z_temp = (p2.z - p1.z) * scalar + p1.z;
+    float x_temp = dx * scalar + p1.x;
+    float y_temp = dy * scalar + p1.y;
+    float z_temp = dz * scalar + p1.z;
     point3D p3(x_temp, y_temp, z_temp);
     return segment_vector(p1, p3);
 }
-
+//replace with operator overload
 segment_vector segment_vector::add_vector(segment_vector v){
     float dx = (p2.x - p1.x) + (v.p2.x - v.p1.x);
     float dy = (p2.y - p1.y) + (v.p2.y - v.p1.y);
@@ -49,6 +45,7 @@ segment_vector segment_vector::add_vector(segment_vector v){
     point3D p3 = point3D(p1.x + dx,p1.y + dy,p1.z+ dz);
     return segment_vector(p1, p3);
 }
+
 
 segment_vector segment_vector::abs_vector(){
     
@@ -75,7 +72,7 @@ segment_vector directional_vector::multiply_directional_vector(float scalar){
 }
 segment_vector cross_product(const directional_vector& v1, const directional_vector& v2){
     return (segment_vector(point3D(), point3D(
-        v1.x*v2.z - v1.z*v2.y,
+        v1.y*v2.z - v1.z*v2.y,
         v1.z*v2.x - v1.x*v2.z,
         v1.x*v2.y - v1.y*v2.x
     )));
@@ -121,7 +118,7 @@ float dot_product(const directional_vector& v1, const segment_vector& v2){
     return v1.x * v2.dx + v1.y * v2.dy + v1.z * v2.dz;
 }
 float dot_product(const segment_vector& v1, const segment_vector& v2){
-    return v1.dx * v2.dx + v1.dy * v2.dy, v1.dz * v2.dz;
+    return v1.dx * v2.dx + v1.dy * v2.dy + v1.dz * v2.dz;
 }
 float dot_product(const directional_vector& v1, const directional_vector& v2){
     return v1.x*v2.x + v1.y*v2.y + v1.z*v2.z;
