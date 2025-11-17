@@ -50,4 +50,5 @@ void Renderer::render(){
         }
 
     }
+    out.close();
 }

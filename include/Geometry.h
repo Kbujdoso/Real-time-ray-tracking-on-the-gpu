@@ -42,7 +42,7 @@ point3D operator+(point3D p, directional_vector v);
 point3D operator-(point3D p, directional_vector v);
 point3D operator/(directional_vector v, float scalar);
 point3D operator*(point3D p, float scalar);
-std::array<directional_vector, 2> create_viewport_vectors(directional_vector v);
+std::array<directional_vector, 2> create_viewport_vectors(const directional_vector& v);
 
 segment_vector cross_product(const directional_vector& v1, const directional_vector& v2);
 float dot_product(const directional_vector& v1, const segment_vector& v2);

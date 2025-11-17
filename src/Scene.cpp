@@ -108,7 +108,7 @@ std::optional<Color> Scene::trace(Ray ray){
     for (auto& obj : objects) {
         switch (obj->type())
         {
-        case ObjectType::Rectangle:
+        case ObjectType::Rectangle:{
             auto* r = static_cast<Rectangle*>(obj); 
             auto opt_result = rectangle_intersection_test(ray, *r);
             if(opt_result){
@@ -116,7 +116,8 @@ std::optional<Color> Scene::trace(Ray ray){
                 return result.Surface_data().Surface_color(); 
             }
             break;
-        case ObjectType::Sphere:
+        }
+        case ObjectType::Sphere: {
             auto* s = static_cast<Sphere*>(obj);
             auto opt_result = sphere_intersection_test(ray, *s);
             if (opt_result){
@@ -124,7 +125,8 @@ std::optional<Color> Scene::trace(Ray ray){
                 return result.Surface_data().Surface_color();
             }
             break;
-        case ObjectType::Infinite_plane:
+        }
+        case ObjectType::Infinite_plane: {
             auto* i = static_cast<Infinite_Plane*>(obj);
             auto opt_result = infinite_plane_intersection_test(ray, *i);
             if (opt_result){
@@ -133,6 +135,7 @@ std::optional<Color> Scene::trace(Ray ray){
             }
 
             break;
+        }
         }
     }
     return std::nullopt;
