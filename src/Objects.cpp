@@ -29,17 +29,14 @@ ObjectType Objects::type(){
 }
 
 
-Infinite_Plane::Infinite_Plane(point3D c, Surface s, float ra, float re, directional_vector d, directional_vector n){
+Infinite_Plane::Infinite_Plane(point3D c, Surface s, float ra, float re, directional_vector n){
     coordinate = c;
     surface = s; 
     refraction = ra;
     reflection = re; 
-    direction = d;
     normal_vector = n;
 }
-directional_vector Infinite_Plane::D(){
-    return direction;
-}
+
 directional_vector Infinite_Plane::N(){
     return normal_vector;
 }

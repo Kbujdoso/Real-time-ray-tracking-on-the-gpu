@@ -64,13 +64,14 @@ std::optional<Intersection_data> Scene::sphere_intersection_test(Ray& ray, Spher
         }
     }   
 }
+
 std::optional<Intersection_data> Scene::infinite_plane_intersection_test(Ray ray, Infinite_Plane infinite_plane){
     bool parallel = std::fabs(dot_product(ray.D(), infinite_plane.N())) < 1e-6f;
     if(parallel){ //if its paralel there is no intersection
         return std::nullopt;
     } else { //if its not parallel then we start calculating the intersection
-        segment_vector CO_vector = segment_vector(infinite_plane.C() ,ray.O()); 
-        float t = dot_product(infinite_plane.N(), CO_vector)/dot_product(ray.D(), infinite_plane.N());
+        segment_vector OC_vector = segment_vector(ray.O(),infinite_plane.C()); 
+        float t = dot_product(infinite_plane.N(), OC_vector)/dot_product(ray.D(), infinite_plane.N());
         if (t < 0 ){ // if t < 0 the object is behind the camera
             return std::nullopt;
         } else { // if not we trace the ray and returnthe point
@@ -88,8 +89,8 @@ std::optional<Intersection_data> Scene::rectangle_intersection_test(Ray& ray, Re
         return std::nullopt;
     } 
     else { //if not parallel we start calculating the intersection by starting calculating the intersection with the infinite plane
-        segment_vector CO_vector = segment_vector(rectangle.C() ,ray.O()); 
-        float t = dot_product(rectangle.N(), CO_vector)/dot_product(ray.D(), rectangle.N());
+        segment_vector OC_vector = segment_vector(ray.O(), rectangle.C()); 
+        float t = dot_product(rectangle.N(), OC_vector)/dot_product(ray.D(), rectangle.N());
         if (t < 0 ){ // if t < 0 then the object is behind the camera
             return std::nullopt;
         } 
@@ -105,6 +106,7 @@ std::optional<Intersection_data> Scene::rectangle_intersection_test(Ray& ray, Re
         }
     }
 }
+
 std::optional<Color> Scene::trace(Ray ray){
     for (auto& obj : objects) {
         switch (obj->type())
@@ -134,7 +136,6 @@ std::optional<Color> Scene::trace(Ray ray){
                 Intersection_data result = *opt_result;
                 return result.Surface_data().Surface_color();
             }
-
             break;
         }
         }

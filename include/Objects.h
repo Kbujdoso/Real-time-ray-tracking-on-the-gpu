@@ -22,11 +22,10 @@ public:
 
 class Infinite_Plane : public Objects {
     private: 
-        directional_vector direction;
         directional_vector normal_vector;
     public:
     Infinite_Plane();
-    Infinite_Plane(point3D coordinate, Surface surface, float refraction, float reflection, directional_vector direction, directional_vector normal_vector);
+    Infinite_Plane(point3D coordinate, Surface surface, float refraction, float reflection, directional_vector normal_vector);
     directional_vector D();
     directional_vector N();
     ObjectType type() override;

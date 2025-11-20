@@ -84,5 +84,153 @@ TEST(sphere_intersection_test, IntersecTwoPointSecondReturn){
 }
 
 TEST(Infinite_plane_intersetion_test, ParallelNoInterSection){
+    directional_vector dv({1,0,0});
+    directional_vector nv({0,1,0});
+    Ray ray = Ray(point3D(), dv);
+    Scene scene;
+    Infinite_Plane infinite_plane = Infinite_Plane(point3D(0,0,-1), Surface(), 1.0f, 1.0f, nv);
+    auto result = scene.infinite_plane_intersection_test(ray, infinite_plane);
+    if(result){
+        std::cout << "not null";     
+        std::cout << "P: (" 
+          << result->P().x << ", " 
+          << result->P().y << ", " 
+          << result->P().z << ")\n";
+        FAIL();
+    }
+    else {
+        EXPECT_EQ(result, std::nullopt);
+    }
+}
+
+TEST(Infinite_plane_intersetion_test, InterSection){
+        directional_vector dv({1,0,0});
+    directional_vector nv({1,0,0});
+    Ray ray = Ray(point3D(), dv);
+    Scene scene;
+    Infinite_Plane infinite_plane = Infinite_Plane(point3D(5,0,2), Surface(), 1.0f, 1.0f, nv);
+    auto result = scene.infinite_plane_intersection_test(ray, infinite_plane);
+    if(result){
+        EXPECT_EQ(result->P().x, 5);
+        EXPECT_EQ(result->P().y, 0);
+        EXPECT_EQ(result->P().z, 0);
+        std::cout << "not null";     
+        std::cout << "P: (" 
+          << result->P().x << ", " 
+          << result->P().y << ", " 
+          << result->P().z << ")\n";
+        
+    }
+    else {
+        std::cout << "optnull was returned and was not expected";
+        FAIL();
+    }
+}
+
+
+TEST(Infinite_plane_intersetion_test, NoInterSectionBehindTheCamera){
+    directional_vector dv({1,0,0});
+    directional_vector nv({1,0,0});
+    Ray ray = Ray(point3D(), dv);
+    Scene scene;
+    Infinite_Plane infinite_plane = Infinite_Plane(point3D(-5,0,2), Surface(), 1.0f, 1.0f, nv);
+    auto result = scene.infinite_plane_intersection_test(ray, infinite_plane);
+    if(result){
+
+        std::cout << "not null";     
+        std::cout << "P: (" 
+          << result->P().x << ", " 
+          << result->P().y << ", " 
+          << result->P().z << ")\n";
+        FAIL();
+    }
+    else {
+        EXPECT_EQ(result, std::nullopt);
+    }
+}
+
+
+TEST(plane_intersection_test, NoInterSectionParallel){
+    directional_vector dv({1,0,0});
+    Ray ray = Ray(point3D(), dv);
+    point3D C({-1,0,0});
+    Scene scene;
+    Rectangle rectangle = Rectangle(segment_vector(C, point3D(0,1,0)),segment_vector(C, point3D(0,0,1)), C, Surface(), 1.0f, 1.0f);
+    auto result = scene.rectangle_intersection_test(ray, rectangle);
+    if(result){
+        std::cout << "not null";     
+        std::cout << "P: (" 
+          << result->P().x << ", " 
+          << result->P().y << ", " 
+          << result->P().z << ")\n";
+        FAIL();
+    }
+    else {
+        EXPECT_EQ(result, std::nullopt);
+    }
+}
+
+TEST(plane_intersection_test, NoInterSectionNotParallel){
+    directional_vector dv({1,0,0});
+    Ray ray = Ray(point3D(), dv);
+    point3D C({0,200,0});
+    Scene scene;
+    Rectangle rectangle = Rectangle(segment_vector(C, point3D(1,0,0)),segment_vector(C, point3D(0,0.5f,0.5f)), C, Surface(), 1.0f, 1.0f);
+    auto result = scene.rectangle_intersection_test(ray, rectangle);
+    if(result){
+        std::cout << "not null";     
+        std::cout << "P: (" 
+          << result->P().x << ", " 
+          << result->P().y << ", " 
+          << result->P().z << ")\n";
+        FAIL();
+    }
+    else {
+        EXPECT_EQ(result, std::nullopt);
+    }
+}
+TEST(plane_intersection_test, Intersection){
+    directional_vector dv({1,0,0});
+    Ray ray = Ray(point3D(), dv);
+    point3D C({5,0,0});
+    Scene scene;
+    Rectangle rectangle = Rectangle(segment_vector(C, point3D(0,1,0)),segment_vector(C, point3D(0.5f,0,1)), C, Surface(), 1.0f, 1.0f);
+    auto result = scene.rectangle_intersection_test(ray, rectangle);
+    if(result){
+        std::cout << "not null";     
+        std::cout << "P: (" 
+          << result->P().x << ", " 
+          << result->P().y << ", " 
+          << result->P().z << ")\n";
+        EXPECT_EQ(result->P().x, 5);
+        EXPECT_EQ(result->P().y, 0);
+        EXPECT_EQ(result->P().z, 0);
+    }
+    else{
+        std::cout << "null";
+        FAIL();
+    }
+}
+
+TEST(plane_intersection_test, NoIntersectionBehindTheCamera){
+    directional_vector dv({1,0,0});
+    Ray ray = Ray(point3D(), dv);
+    point3D C({-5,0,0});
+    Scene scene;
+    Rectangle rectangle = Rectangle(segment_vector(C, point3D(0,1,0)),segment_vector(C, point3D(0.5f,0,1)), C, Surface(), 1.0f, 1.0f);
+    auto result = scene.rectangle_intersection_test(ray, rectangle);
+    if(result){
+        std::cout << "not null";     
+        std::cout << "P: (" 
+          << result->P().x << ", " 
+          << result->P().y << ", " 
+          << result->P().z << ")\n";
+        FAIL();
+    }
+    else{
+        std::cout << "null";
+        EXPECT_EQ(result, std::nullopt);
+    }
 
 }
+

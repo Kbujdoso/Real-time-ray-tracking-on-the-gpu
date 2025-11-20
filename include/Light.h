@@ -24,7 +24,7 @@ class Point_Light : public Light{
         float intensity;
     public:
         Point_Light();
-        Point_Light(point3D Coordinate, float intensity);
+        Point_Light(point3D Coordinate, float Intensity);
         point3D get_coordinate();
         float get_intensity();
 };
