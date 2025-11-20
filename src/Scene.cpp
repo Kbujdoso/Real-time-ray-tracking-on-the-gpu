@@ -35,27 +35,28 @@ Scene::Scene(){
 }
 
 std::optional<Intersection_data> Scene::sphere_intersection_test(Ray& ray, Sphere& sphere){
+    const float eps = 1e-6f;
     float a = 1;
-    segment_vector OC_vector = segment_vector(ray.O(), sphere.C());
-    float b = dot_product(ray.D(), OC_vector);
+    segment_vector OC_vector = segment_vector(sphere.C(), ray.O());
+    float b = 2 * dot_product(ray.D(), OC_vector);
     float r = sphere.R();
     float c = dot_product(OC_vector, OC_vector) - r*r;
     float discriminant = b*b - 4*a*c;
     if (discriminant < 0){ //we check for the discriminant if discriminant < 0 there is no real solution for the polinom
         return std::nullopt; 
     } else 
-    if (discriminant = 0){ //only one real solution for the polinom
-        float t = -1*(b/(2*a));
+    if (std::fabs(discriminant) < eps){ //only one real solution for the polinom
+        float t = -b/(2*a);
             return Intersection_data(sphere.Surface_data() ,ray.trace_ray(t)); 
     } 
     else //two real solutions for the polinom we need the the smaller and greater than 0 else its behind the camera
     {
-        float t1 = -b+sqrt(discriminant)/(2*a);
-        float t2 = -b-sqrt(discriminant)/(2*a);
+        float t1 = (-b-sqrt(discriminant))/(2*a);
+        float t2 = (-b+sqrt(discriminant))/(2*a);
         if (t1 > 0 && t1 < t2){
             return Intersection_data(sphere.Surface_data() ,ray.trace_ray(t1)); 
         } else 
-        if (t2 > 0 && t2 < t1){
+        if (t2 > 0){
             return Intersection_data(sphere.Surface_data() ,ray.trace_ray(t2)); 
         } else 
         {
