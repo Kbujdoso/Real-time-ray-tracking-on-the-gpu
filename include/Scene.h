@@ -20,7 +20,7 @@ struct Intersection_data{
         Intersection_data();
         Intersection_data(Surface S, point3D P, float T);
         Surface Surface_data();
-        point3D P();
+        point3D C();
         float T();
 };
 class Scene{

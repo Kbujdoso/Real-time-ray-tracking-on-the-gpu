@@ -7,7 +7,7 @@ class Light{
     protected:
         Color color;
         Scene scene;
-        virtual Color illuminate(point3D point, directional_vector normal, Color color,Point_Light Light);
+        virtual Color illuminate(Intersection_data data, Point_Light light);
     public:
         Light();
         Light(Color color);
@@ -27,7 +27,7 @@ class Point_Light : public Light{
     public:
         Point_Light();
         Point_Light(point3D Coordinate, float Intensity, Scene scene);
-        point3D get_coordinate();
+        point3D C();
         float get_intensity();
 };
 #endif

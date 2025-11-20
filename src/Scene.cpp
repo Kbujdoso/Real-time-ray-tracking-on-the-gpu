@@ -21,8 +21,11 @@ Intersection_data::Intersection_data(Surface S, point3D P, float T){
 Surface Intersection_data::Surface_data(){
     return surface;
 }
-point3D Intersection_data::P(){
+point3D Intersection_data::C(){
     return p;
+}
+float Intersection_data::T(){
+    return t;
 }
 
 Scene::Scene(std::vector<Objects*> Objects, std::vector<Light> Lights) {
