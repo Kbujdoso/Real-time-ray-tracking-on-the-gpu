@@ -13,9 +13,10 @@
 
 Intersection_data::Intersection_data(){
 }
-Intersection_data::Intersection_data(Surface S, point3D P){
+Intersection_data::Intersection_data(Surface S, point3D P, float T){
     surface = S;
     p = P;
+    t = T;
 }
 Surface Intersection_data::Surface_data(){
     return surface;
@@ -47,17 +48,17 @@ std::optional<Intersection_data> Scene::sphere_intersection_test(Ray& ray, Spher
     } else 
     if (std::fabs(discriminant) < eps){ //only one real solution for the polinom
         float t = -b/(2*a);
-            return Intersection_data(sphere.Surface_data() ,ray.trace_ray(t)); 
+            return Intersection_data(sphere.Surface_data() ,ray.trace_ray(t), t); 
     } 
     else //two real solutions for the polinom we need the the smaller and greater than 0 else its behind the camera
     {
         float t1 = (-b-sqrt(discriminant))/(2*a);
         float t2 = (-b+sqrt(discriminant))/(2*a);
         if (t1 > 0 && t1 < t2){
-            return Intersection_data(sphere.Surface_data() ,ray.trace_ray(t1)); 
+            return Intersection_data(sphere.Surface_data() ,ray.trace_ray(t1), t1); 
         } else 
         if (t2 > 0){
-            return Intersection_data(sphere.Surface_data() ,ray.trace_ray(t2)); 
+            return Intersection_data(sphere.Surface_data() ,ray.trace_ray(t2), t2); 
         } else 
         {
             return std::nullopt;
@@ -75,7 +76,7 @@ std::optional<Intersection_data> Scene::infinite_plane_intersection_test(Ray ray
         if (t < 0 ){ // if t < 0 the object is behind the camera
             return std::nullopt;
         } else { // if not we trace the ray and returnthe point
-            return Intersection_data(infinite_plane.Surface_data() ,ray.trace_ray(t)); 
+            return Intersection_data(infinite_plane.Surface_data() ,ray.trace_ray(t), t); 
         }
     }
 }
@@ -100,14 +101,14 @@ std::optional<Intersection_data> Scene::rectangle_intersection_test(Ray& ray, Re
             float u_proj = dot_product(w, rectangle.U())/dot_product(rectangle.U(), rectangle.U());
             float v_proj = dot_product(w, rectangle.V())/dot_product(rectangle.V(), rectangle.V());
             if(0 <= u_proj && 1 >= u_proj && 0 <= v_proj && 1 >= v_proj){
-            return Intersection_data(rectangle.Surface_data() ,P); 
+            return Intersection_data(rectangle.Surface_data() ,P, t); 
             }
             else { return std::nullopt;}
         }
     }
 }
 
-std::optional<Color> Scene::trace(Ray ray){
+std::optional<Intersection_data> Scene::trace(Ray ray){
     for (auto& obj : objects) {
         switch (obj->type())
         {
@@ -116,7 +117,7 @@ std::optional<Color> Scene::trace(Ray ray){
             auto opt_result = rectangle_intersection_test(ray, *r);
             if(opt_result){
                 Intersection_data result = *opt_result;
-                return result.Surface_data().Surface_color(); 
+                return result; 
             }
             break;
         }
@@ -125,7 +126,7 @@ std::optional<Color> Scene::trace(Ray ray){
             auto opt_result = sphere_intersection_test(ray, *s);
             if (opt_result){
                 Intersection_data result = *opt_result;
-                return result.Surface_data().Surface_color();
+                return result;
             }
             break;
         }
@@ -134,7 +135,7 @@ std::optional<Color> Scene::trace(Ray ray){
             auto opt_result = infinite_plane_intersection_test(ray, *i);
             if (opt_result){
                 Intersection_data result = *opt_result;
-                return result.Surface_data().Surface_color();
+                return result;
             }
             break;
         }

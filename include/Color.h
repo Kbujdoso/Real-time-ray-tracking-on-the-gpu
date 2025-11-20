@@ -11,5 +11,7 @@ class Color{
         int Red();
         int Blue();
         int Green();
-};
+
+    };
+    Color operator*(Color color, float scalar);
 #endif

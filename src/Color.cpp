@@ -14,3 +14,10 @@ int Color::Blue(){
 int Color::Green(){
     return green;
 }
+
+Color operator*(Color color, float scalar){
+    float red = color.Red() * scalar;
+    float green = color.Green() * scalar;
+    float blue = color.Blue() * scalar;
+    return Color(red, blue, green);
+}

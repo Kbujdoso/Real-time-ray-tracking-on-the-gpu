@@ -15,11 +15,13 @@ struct Intersection_data{
     private: 
         Surface surface;
         point3D p;
+        float t;
     public:
         Intersection_data();
-        Intersection_data(Surface S, point3D P);
+        Intersection_data(Surface S, point3D P, float T);
         Surface Surface_data();
         point3D P();
+        float T();
 };
 class Scene{
     private: 
@@ -33,7 +35,7 @@ class Scene{
         std::optional<Intersection_data> sphere_intersection_test(Ray& ray, Sphere& sphere); 
         std::optional<Intersection_data> rectangle_intersection_test(Ray& ray, Rectangle& rectangle); 
         std::optional<Intersection_data> infinite_plane_intersection_test(Ray ray, Infinite_Plane infinite_plane);
-        std::optional<Color> trace(Ray ray); 
+        std::optional<Intersection_data> trace(Ray ray); 
         void add_object(Objects object);
         void remove_object(Objects object);
         std::vector<Objects> get_Objects();
