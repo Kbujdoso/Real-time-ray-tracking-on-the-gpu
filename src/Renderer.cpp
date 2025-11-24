@@ -4,6 +4,8 @@
 #include "Scene.h"
 #include <fstream>
 #include <algorithm>
+#include <cmath>
+#include "Globals.h"
 Renderer::Renderer(const Camera& c, const Scene& s, const Resolution& r){
     camera = c;
     scene = s;
@@ -32,20 +34,21 @@ void Renderer::render(){
     {
         for (int j = 0; j < image_height; j++)
         {
+            Color color;
             directional_vector ray_direction = directional_vector(viewport_left_up + one_pixel_right*i - one_pixel_down * j);
             Ray ray = Ray(coordinate, ray_direction);
-            auto opt_pixel_color = scene.trace(ray);
-            Color pixel_color;
-            if (opt_pixel_color) {
-                pixel_color = *opt_pixel_color; 
+            auto opt_intersection_data = scene.trace(ray);
+            Intersection_data intersection_data;
+            if (opt_intersection_data) {
+                intersection_data = *opt_intersection_data; 
+                color = intersection_data.Surface_data().Surface_color();
             } else {
-                pixel_color = Color();
+                color = Color();
             }
 
-            int r = std::clamp(int(pixel_color.Red() * 255), 0, 255);
-            int g = std::clamp(int(pixel_color.Green() * 255), 0, 255);
-            int b = std::clamp(int(pixel_color.Blue() * 255), 0, 255);
-
+            int r = std::round(tone(color.Red())   * 255);
+            int g = std::round(tone(color.Green()) * 255);
+            int b = std::round(tone(color.Blue())  * 255);
             out << r << " " << g << " " << b << "\n";
         }
 
