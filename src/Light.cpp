@@ -13,10 +13,9 @@ Directional_Light::Directional_Light(){
     color = Color();
     direction = directional_vector();
 }
-Directional_Light::Directional_Light(Color c, directional_vector Direction, Scene Scene){
+Directional_Light::Directional_Light(Color c, directional_vector Direction){
     color = c; 
     direction = Direction;
-    scene = Scene;
 }
 
 directional_vector Directional_Light::get_direction(){
@@ -27,10 +26,9 @@ Point_Light::Point_Light(){
     coordinate = point3D();
     intensity = 1;
 }
-Point_Light::Point_Light(point3D Coordinate, float Intensity, Scene Scene){
+Point_Light::Point_Light(point3D Coordinate, float Intensity){
     coordinate = Coordinate;
     intensity = Intensity;
-    scene = Scene;
 }
 
 point3D Point_Light::C(){
@@ -40,7 +38,7 @@ float Point_Light::get_intensity(){
     return intensity;
 }
 
-Color Light::illuminate(Intersection_data data, Point_Light light){
+Color Light::illuminate(Intersection_data data, Point_Light light, Scene scene){
     point3D c = data.C();
     point3D light_c = light.C();
     directional_vector direction = segment_vector(c, light_c).normalize_vector();

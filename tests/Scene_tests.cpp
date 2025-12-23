@@ -12,9 +12,9 @@ TEST(sphere_intersection_test, NoIntersection){
     auto result = scene.sphere_intersection_test(ray, sphere);
     if(result){
             std::cout << "P: (" 
-            << result->P().x << ", " 
-            << result->P().y << ", " 
-            << result->P().z << ")\n";
+            << result->C().x << ", " 
+            << result->C().y << ", " 
+            << result->C().z << ")\n";
             FAIL();
         } else {
             std::cout << "result is a nullpointer";
@@ -28,14 +28,14 @@ TEST(sphere_intersection_test, IntersectSinglePoint){
     Scene scene;
     auto result = scene.sphere_intersection_test(ray, sphere);
     if(result){
-        EXPECT_EQ(result->P().x, 1.0f);
-        EXPECT_EQ(result->P().y, 0.0f);
-        EXPECT_EQ(result->P().z, 0.0f);
+        EXPECT_EQ(result->C().x, 1.0f);
+        EXPECT_EQ(result->C().y, 0.0f);
+        EXPECT_EQ(result->C().z, 0.0f);
         std::cout << "dicriminant == 0";
         std::cout << "P: (" 
-          << result->P().x << ", " 
-          << result->P().y << ", " 
-          << result->P().z << ")\n";
+          << result->C().x << ", " 
+          << result->C().y << ", " 
+          << result->C().z << ")\n";
     } else {
         std::cout << "dicriminant == 0";
         std::cout << "result is a nullpointer";
@@ -50,13 +50,13 @@ TEST(sphere_intersection_test, IntersecTwoPointFirstReturn){
     Scene scene;
     auto result = scene.sphere_intersection_test(ray, sphere);
     if(result){
-        EXPECT_EQ(result->P().x, 1.0f);
-        EXPECT_EQ(result->P().y, 0.0f);
-        EXPECT_EQ(result->P().z, 0.0f);
+        EXPECT_EQ(result->C().x, 1.0f);
+        EXPECT_EQ(result->C().y, 0.0f);
+        EXPECT_EQ(result->C().z, 0.0f);
         std::cout << "P: (" 
-          << result->P().x << ", " 
-          << result->P().y << ", " 
-          << result->P().z << ")\n";
+          << result->C().x << ", " 
+          << result->C().y << ", " 
+          << result->C().z << ")\n";
     } else {
         std::cout << "result is a nullpointer";
         FAIL();
@@ -70,13 +70,13 @@ TEST(sphere_intersection_test, IntersecTwoPointSecondReturn){
     Scene scene;
     auto result = scene.sphere_intersection_test(ray, sphere);
     if(result){
-        EXPECT_EQ(result->P().x, 1.5f);
-        EXPECT_EQ(result->P().y, 0.0f);
-        EXPECT_EQ(result->P().z, 0.0f);
+        EXPECT_EQ(result->C().x, 1.5f);
+        EXPECT_EQ(result->C().y, 0.0f);
+        EXPECT_EQ(result->C().z, 0.0f);
         std::cout << "P: (" 
-          << result->P().x << ", " 
-          << result->P().y << ", " 
-          << result->P().z << ")\n";
+          << result->C().x << ", " 
+          << result->C().y << ", " 
+          << result->C().z << ")\n";
     } else {
         std::cout << "result is a nullpointer";
         FAIL();
@@ -93,9 +93,9 @@ TEST(Infinite_plane_intersetion_test, ParallelNoInterSection){
     if(result){
         std::cout << "not null";     
         std::cout << "P: (" 
-          << result->P().x << ", " 
-          << result->P().y << ", " 
-          << result->P().z << ")\n";
+          << result->C().x << ", " 
+          << result->C().y << ", " 
+          << result->C().z << ")\n";
         FAIL();
     }
     else {
@@ -111,14 +111,14 @@ TEST(Infinite_plane_intersetion_test, InterSection){
     Infinite_Plane infinite_plane = Infinite_Plane(point3D(5,0,2), Surface(), 1.0f, 1.0f, nv);
     auto result = scene.infinite_plane_intersection_test(ray, infinite_plane);
     if(result){
-        EXPECT_EQ(result->P().x, 5);
-        EXPECT_EQ(result->P().y, 0);
-        EXPECT_EQ(result->P().z, 0);
+        EXPECT_EQ(result->C().x, 5);
+        EXPECT_EQ(result->C().y, 0);
+        EXPECT_EQ(result->C().z, 0);
         std::cout << "not null";     
         std::cout << "P: (" 
-          << result->P().x << ", " 
-          << result->P().y << ", " 
-          << result->P().z << ")\n";
+          << result->C().x << ", " 
+          << result->C().y << ", " 
+          << result->C().z << ")\n";
         
     }
     else {
@@ -139,9 +139,9 @@ TEST(Infinite_plane_intersetion_test, NoInterSectionBehindTheCamera){
 
         std::cout << "not null";     
         std::cout << "P: (" 
-          << result->P().x << ", " 
-          << result->P().y << ", " 
-          << result->P().z << ")\n";
+          << result->C().x << ", " 
+          << result->C().y << ", " 
+          << result->C().z << ")\n";
         FAIL();
     }
     else {
@@ -160,9 +160,9 @@ TEST(plane_intersection_test, NoInterSectionParallel){
     if(result){
         std::cout << "not null";     
         std::cout << "P: (" 
-          << result->P().x << ", " 
-          << result->P().y << ", " 
-          << result->P().z << ")\n";
+          << result->C().x << ", " 
+          << result->C().y << ", " 
+          << result->C().z << ")\n";
         FAIL();
     }
     else {
@@ -180,9 +180,9 @@ TEST(plane_intersection_test, NoInterSectionNotParallel){
     if(result){
         std::cout << "not null";     
         std::cout << "P: (" 
-          << result->P().x << ", " 
-          << result->P().y << ", " 
-          << result->P().z << ")\n";
+          << result->C().x << ", " 
+          << result->C().y << ", " 
+          << result->C().z << ")\n";
         FAIL();
     }
     else {
@@ -199,12 +199,12 @@ TEST(plane_intersection_test, Intersection){
     if(result){
         std::cout << "not null";     
         std::cout << "P: (" 
-          << result->P().x << ", " 
-          << result->P().y << ", " 
-          << result->P().z << ")\n";
-        EXPECT_EQ(result->P().x, 5);
-        EXPECT_EQ(result->P().y, 0);
-        EXPECT_EQ(result->P().z, 0);
+          << result->C().x << ", " 
+          << result->C().y << ", " 
+          << result->C().z << ")\n";
+        EXPECT_EQ(result->C().x, 5);
+        EXPECT_EQ(result->C().y, 0);
+        EXPECT_EQ(result->C().z, 0);
     }
     else{
         std::cout << "null";
@@ -222,9 +222,9 @@ TEST(plane_intersection_test, NoIntersectionBehindTheCamera){
     if(result){
         std::cout << "not null";     
         std::cout << "P: (" 
-          << result->P().x << ", " 
-          << result->P().y << ", " 
-          << result->P().z << ")\n";
+          << result->C().x << ", " 
+          << result->C().y << ", " 
+          << result->C().z << ")\n";
         FAIL();
     }
     else{

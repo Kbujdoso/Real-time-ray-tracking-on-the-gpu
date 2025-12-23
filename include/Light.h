@@ -3,11 +3,13 @@
 #include "Color.h"
 #include "Geometry.h"
 #include "Scene.h"
+class Scene; 
+struct Intersection_data; 
+class Point_Light;
 class Light{
     protected:
         Color color;
-        Scene scene;
-        virtual Color illuminate(Intersection_data data, Point_Light light);
+        virtual Color illuminate(Intersection_data data, Point_Light light, Scene scene);
     public:
         Light();
         Light(Color color);
@@ -18,7 +20,7 @@ class Directional_Light : public Light{
     public:
         directional_vector get_direction();
         Directional_Light();
-        Directional_Light(Color color, directional_vector Direction, Scene scene);
+        Directional_Light(Color color, directional_vector Direction);
 };
 class Point_Light : public Light{
     private: 
@@ -26,7 +28,7 @@ class Point_Light : public Light{
         float intensity;
     public:
         Point_Light();
-        Point_Light(point3D Coordinate, float Intensity, Scene scene);
+        Point_Light(point3D Coordinate, float Intensity);
         point3D C();
         float get_intensity();
 };

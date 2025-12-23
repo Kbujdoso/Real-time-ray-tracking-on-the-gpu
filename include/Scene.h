@@ -11,6 +11,7 @@
 #include "Light.h"
 #include "Objects.h"
 #include "Surface.h"
+class Light;
 struct Intersection_data{
     private: 
         Surface surface;
