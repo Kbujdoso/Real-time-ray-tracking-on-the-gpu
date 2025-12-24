@@ -6,10 +6,9 @@
 #include <algorithm>
 #include <cmath>
 #include "Globals.h"
-Renderer::Renderer(const Camera& c, const Scene& s, const Resolution& r){
+Renderer::Renderer(Camera c, Scene s){
     camera = c;
     scene = s;
-    resolution = r;
 }
 
 

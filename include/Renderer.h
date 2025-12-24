@@ -11,7 +11,7 @@ class Renderer{
         Resolution resolution;
     public: 
         Renderer();
-        Renderer(const Camera&, const Scene&, const Resolution&);
+        Renderer(Camera camera, Scene scene);
         void render();
 
 };

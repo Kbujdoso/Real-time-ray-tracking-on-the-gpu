@@ -28,10 +28,10 @@ class Scene{
     private: 
         std::vector<Objects*> objects;
         int num_objects;
-        std::vector<Light> lights;
+        std::vector<Light*> lights;
         int num_lights;
     public:
-        Scene(std::vector<Objects*> objects, std::vector<Light> lights);
+        Scene(std::vector<Objects*> objects, std::vector<Light*> lights);
         Scene();
         std::optional<Intersection_data> sphere_intersection_test(Ray& ray, Sphere& sphere); 
         std::optional<Intersection_data> rectangle_intersection_test(Ray& ray, Rectangle& rectangle); 

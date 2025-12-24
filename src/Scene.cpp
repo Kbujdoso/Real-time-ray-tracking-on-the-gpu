@@ -9,6 +9,7 @@
 #include "Light.h"
 #include "Objects.h"
 #include <cmath>
+#include <algorithm>
 
 
 Intersection_data::Intersection_data(){
@@ -28,7 +29,7 @@ float Intersection_data::T(){
     return t;
 }
 
-Scene::Scene(std::vector<Objects*> Objects, std::vector<Light> Lights) {
+Scene::Scene(std::vector<Objects*> Objects, std::vector<Light*> Lights) {
     objects = Objects;
     lights = Lights;
 }
@@ -145,5 +146,13 @@ std::optional<Intersection_data> Scene::trace(Ray ray){
         }
     }
     return std::nullopt;
+}
+
+void Scene::add_object(Objects object){
+    objects.emplace_back(&object);
+}
+
+void Scene::add_light(Light light){
+    lights.emplace_back(&light);
 }
 
