@@ -233,4 +233,14 @@ TEST(plane_intersection_test, NoIntersectionBehindTheCamera){
     }
 
 }
+TEST(trace, SegmentationFaultTest){
+    directional_vector dv({1,0,0});
+    directional_vector nv({0,1,0});
+    Ray ray = Ray(point3D(), dv);
+    Scene scene;
+    Infinite_Plane infinite_plane = Infinite_Plane(point3D(0,0,-1), Surface(), 1.0f, 1.0f, nv);
+    auto result = scene.infinite_plane_intersection_test(ray, infinite_plane);
+    scene.add_object(infinite_plane);
+    scene.trace(ray);
+}
 

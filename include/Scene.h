@@ -12,18 +12,6 @@
 #include "Objects.h"
 #include "Surface.h"
 class Light;
-struct Intersection_data{
-    private: 
-        Surface surface;
-        point3D p;
-        float t;
-    public:
-        Intersection_data();
-        Intersection_data(Surface S, point3D P, float T);
-        Surface Surface_data();
-        point3D C();
-        float T();
-};
 class Scene{
     private: 
         std::vector<Objects*> objects;

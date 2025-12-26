@@ -10,24 +10,8 @@
 #include "Objects.h"
 #include <cmath>
 #include <algorithm>
+#include "Globals.h"
 
-
-Intersection_data::Intersection_data(){
-}
-Intersection_data::Intersection_data(Surface S, point3D P, float T){
-    surface = S;
-    p = P;
-    t = T;
-}
-Surface Intersection_data::Surface_data(){
-    return surface;
-}
-point3D Intersection_data::C(){
-    return p;
-}
-float Intersection_data::T(){
-    return t;
-}
 
 Scene::Scene(std::vector<Objects*> Objects, std::vector<Light*> Lights) {
     objects = Objects;
@@ -39,7 +23,7 @@ Scene::Scene(){
     lights = {};
 }
 
-std::optional<Intersection_data> Scene::sphere_intersection_test(Ray& ray, Sphere& sphere){
+/* std::optional<Intersection_data> Scene::sphere_intersection_test(Ray& ray, Sphere& sphere){
     const float eps = 1e-6f;
     float a = 1;
     segment_vector OC_vector = segment_vector(sphere.C(), ray.O());
@@ -110,42 +94,25 @@ std::optional<Intersection_data> Scene::rectangle_intersection_test(Ray& ray, Re
             else { return std::nullopt;}
         }
     }
-}
+} */
 
-std::optional<Intersection_data> Scene::trace(Ray ray){
+std::optional<Intersection_data> Scene::trace(Ray ray) {
+    std::optional<Intersection_data> closest_hit = std::nullopt;
+    float min_t = std::numeric_limits<float>::max(); 
     for (auto& obj : objects) {
-        switch (obj->type())
-        {
-        case ObjectType::Rectangle:{
-            auto* r = static_cast<Rectangle*>(obj); 
-            auto opt_result = rectangle_intersection_test(ray, *r);
-            if(opt_result){
-                Intersection_data result = *opt_result;
-                return result; 
+
+        auto current_hit = obj->intersect(ray);
+
+        if (current_hit) {
+
+            if (current_hit->T() < min_t) {
+                min_t = current_hit->T();
+                closest_hit = current_hit;
             }
-            break;
-        }
-        case ObjectType::Sphere: {
-            auto* s = static_cast<Sphere*>(obj);
-            auto opt_result = sphere_intersection_test(ray, *s);
-            if (opt_result){
-                Intersection_data result = *opt_result;
-                return result;
-            }
-            break;
-        }
-        case ObjectType::Infinite_plane: {
-            auto* i = static_cast<Infinite_Plane*>(obj);
-            auto opt_result = infinite_plane_intersection_test(ray, *i);
-            if (opt_result){
-                Intersection_data result = *opt_result;
-                return result;
-            }
-            break;
-        }
         }
     }
-    return std::nullopt;
+
+    return closest_hit;
 }
 
 void Scene::add_object(Objects object){

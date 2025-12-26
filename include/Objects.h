@@ -3,6 +3,13 @@
 #include "Geometry.h"
 #include "Surface.h"
 #include "ENUMS.h"
+#include <optional>
+
+class Scene;
+struct Intersection_data;
+class Ray;
+
+
 class Objects{
     protected:
         float reflection;
@@ -18,6 +25,7 @@ public:
         Objects(point3D coordinate, Surface surface, float refraction, float reflection);
         virtual ~Objects() {}
         virtual ObjectType type();
+        virtual std::optional<Intersection_data> intersect(Ray ray);
 };
 
 class Infinite_Plane : public Objects {
@@ -29,6 +37,7 @@ class Infinite_Plane : public Objects {
     directional_vector D();
     directional_vector N();
     ObjectType type() override;
+    std::optional<Intersection_data> intersect(Ray ray) override;
 };
 
 class Rectangle : public Objects{ 
@@ -42,6 +51,8 @@ class Rectangle : public Objects{
         segment_vector V();
         directional_vector N();
         ObjectType type() override;
+        std::optional<Intersection_data> intersect(Ray ray) override;
+
 
 };
 
@@ -52,8 +63,7 @@ class Sphere : public Objects{
         Sphere(float r, point3D coordinate, Surface surface, float refraction, float reflection);
         float R();
         ObjectType type() override;
-
-
+        std::optional<Intersection_data> intersect(Ray ray) override;
 };
 
 #endif

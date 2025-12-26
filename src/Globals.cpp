@@ -11,3 +11,20 @@ float tone(float x) {
     m = pow(m, 1.0f / 2.2f);      // gamma correction
     return m;
 }
+
+Intersection_data::Intersection_data(){
+}
+Intersection_data::Intersection_data(Surface S, point3D P, float T){
+    surface = S;
+    p = P;
+    t = T;
+}
+Surface Intersection_data::Surface_data(){
+    return surface;
+}
+point3D Intersection_data::C(){
+    return p;
+}
+float Intersection_data::T(){
+    return t;
+}
