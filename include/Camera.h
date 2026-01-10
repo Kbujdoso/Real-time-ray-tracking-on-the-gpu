@@ -19,7 +19,6 @@ class Camera{
         Camera();
         Camera(point3D coordinate, directional_vector direction, float fov, float aspect_ratio, int width);
         
-        Ray generate_ray(int x, int y);
         directional_vector get_direction();
         point3D get_coordinate();
         float get_image_width();

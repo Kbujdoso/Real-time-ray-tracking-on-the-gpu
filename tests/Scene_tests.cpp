@@ -1,32 +1,30 @@
 #include <gtest/gtest.h>
 #include "Scene.h"
 #include "Objects.h"
+#include "Globals.h"
 #include <cmath>
 
 
 TEST(sphere_intersection_test, NoIntersection){
     directional_vector dv({1,0,0});
     Ray ray = Ray(point3D(), dv);
-    Sphere sphere = Sphere(1.0f, point3D(0,2,0), Surface(), 1.0f, 1.0f);
+    auto sphere = std::make_unique<Sphere>(1.0f, point3D(0,2,0), Surface(), 1.0f, 1.0f);
     Scene scene;
-    auto result = scene.sphere_intersection_test(ray, sphere);
+    
+    auto result = sphere->intersect(ray); 
+    
     if(result){
-            std::cout << "P: (" 
-            << result->C().x << ", " 
-            << result->C().y << ", " 
-            << result->C().z << ")\n";
-            FAIL();
-        } else {
-            std::cout << "result is a nullpointer";
-            EXPECT_EQ(result, std::nullopt);
-        }}   
-
+        FAIL();
+    } else {
+        EXPECT_EQ(result, std::nullopt);
+    }
+}
 TEST(sphere_intersection_test, IntersectSinglePoint){
     directional_vector dv({1,0,0});
     Ray ray = Ray(point3D(), dv);
-    Sphere sphere = Sphere(1.0f, point3D(1,1,0), Surface(), 1.0f, 1.0f);
+    auto sphere = std::make_unique<Sphere>(1.0f, point3D(1,1,0), Surface(), 1.0f, 1.0f);
     Scene scene;
-    auto result = scene.sphere_intersection_test(ray, sphere);
+    auto result = sphere->intersect(ray);
     if(result){
         EXPECT_EQ(result->C().x, 1.0f);
         EXPECT_EQ(result->C().y, 0.0f);
@@ -46,9 +44,9 @@ TEST(sphere_intersection_test, IntersectSinglePoint){
 TEST(sphere_intersection_test, IntersecTwoPointFirstReturn){
         directional_vector dv({1,0,0});
     Ray ray = Ray(point3D(), dv);
-    Sphere sphere = Sphere(1.0f, point3D(2,0,0), Surface(), 1.0f, 1.0f);
+    auto sphere = std::make_unique<Sphere>(1.0f, point3D(2,0,0), Surface(), 1.0f, 1.0f);
     Scene scene;
-    auto result = scene.sphere_intersection_test(ray, sphere);
+    auto result = sphere->intersect(ray);
     if(result){
         EXPECT_EQ(result->C().x, 1.0f);
         EXPECT_EQ(result->C().y, 0.0f);
@@ -66,9 +64,9 @@ TEST(sphere_intersection_test, IntersecTwoPointFirstReturn){
 TEST(sphere_intersection_test, IntersecTwoPointSecondReturn){
     directional_vector dv({1,0,0});
     Ray ray = Ray(point3D(), dv);
-    Sphere sphere = Sphere(1.0f, point3D(0.5f,0,0), Surface(), 1.0f, 1.0f);
+    auto sphere = std::make_unique<Sphere>(1.0f, point3D(0.5f,0,0), Surface(), 1.0f, 1.0f);
     Scene scene;
-    auto result = scene.sphere_intersection_test(ray, sphere);
+    auto result = sphere->intersect(ray);
     if(result){
         EXPECT_EQ(result->C().x, 1.5f);
         EXPECT_EQ(result->C().y, 0.0f);
@@ -88,8 +86,8 @@ TEST(Infinite_plane_intersetion_test, ParallelNoInterSection){
     directional_vector nv({0,1,0});
     Ray ray = Ray(point3D(), dv);
     Scene scene;
-    Infinite_Plane infinite_plane = Infinite_Plane(point3D(0,0,-1), Surface(), 1.0f, 1.0f, nv);
-    auto result = scene.infinite_plane_intersection_test(ray, infinite_plane);
+    auto infinite_plane = std::make_unique<Infinite_Plane>(point3D(0,0,-1), Surface(), 1.0f, 1.0f, nv);
+    auto result = infinite_plane->intersect(ray);
     if(result){
         std::cout << "not null";     
         std::cout << "P: (" 
@@ -108,8 +106,8 @@ TEST(Infinite_plane_intersetion_test, InterSection){
     directional_vector nv({1,0,0});
     Ray ray = Ray(point3D(), dv);
     Scene scene;
-    Infinite_Plane infinite_plane = Infinite_Plane(point3D(5,0,2), Surface(), 1.0f, 1.0f, nv);
-    auto result = scene.infinite_plane_intersection_test(ray, infinite_plane);
+    auto infinite_plane = std::make_unique<Infinite_Plane>(point3D(5,0,2), Surface(), 1.0f, 1.0f, nv);
+    auto result = infinite_plane->intersect(ray);
     if(result){
         EXPECT_EQ(result->C().x, 5);
         EXPECT_EQ(result->C().y, 0);
@@ -133,8 +131,8 @@ TEST(Infinite_plane_intersetion_test, NoInterSectionBehindTheCamera){
     directional_vector nv({1,0,0});
     Ray ray = Ray(point3D(), dv);
     Scene scene;
-    Infinite_Plane infinite_plane = Infinite_Plane(point3D(-5,0,2), Surface(), 1.0f, 1.0f, nv);
-    auto result = scene.infinite_plane_intersection_test(ray, infinite_plane);
+    auto infinite_plane = std::make_unique<Infinite_Plane>(point3D(-5,0,2), Surface(), 1.0f, 1.0f, nv);
+    auto result = infinite_plane->intersect(ray);
     if(result){
 
         std::cout << "not null";     
@@ -155,8 +153,8 @@ TEST(plane_intersection_test, NoInterSectionParallel){
     Ray ray = Ray(point3D(), dv);
     point3D C({-1,0,0});
     Scene scene;
-    Rectangle rectangle = Rectangle(segment_vector(C, point3D(0,1,0)),segment_vector(C, point3D(0,0,1)), C, Surface(), 1.0f, 1.0f);
-    auto result = scene.rectangle_intersection_test(ray, rectangle);
+    auto rectangle = std::make_unique<Rectangle>(segment_vector(C, point3D(0,1,0)),segment_vector(C, point3D(0,0,1)), C, Surface(), 1.0f, 1.0f);
+    auto result = rectangle->intersect(ray);
     if(result){
         std::cout << "not null";     
         std::cout << "P: (" 
@@ -175,8 +173,8 @@ TEST(plane_intersection_test, NoInterSectionNotParallel){
     Ray ray = Ray(point3D(), dv);
     point3D C({0,200,0});
     Scene scene;
-    Rectangle rectangle = Rectangle(segment_vector(C, point3D(1,0,0)),segment_vector(C, point3D(0,0.5f,0.5f)), C, Surface(), 1.0f, 1.0f);
-    auto result = scene.rectangle_intersection_test(ray, rectangle);
+    auto rectangle = std::make_unique<Rectangle>(segment_vector(C, point3D(1,0,0)),segment_vector(C, point3D(0,0.5f,0.5f)), C, Surface(), 1.0f, 1.0f);
+    auto result = rectangle->intersect(ray);
     if(result){
         std::cout << "not null";     
         std::cout << "P: (" 
@@ -194,8 +192,8 @@ TEST(plane_intersection_test, Intersection){
     Ray ray = Ray(point3D(), dv);
     point3D C({5,0,0});
     Scene scene;
-    Rectangle rectangle = Rectangle(segment_vector(C, point3D(0,1,0)),segment_vector(C, point3D(0.5f,0,1)), C, Surface(), 1.0f, 1.0f);
-    auto result = scene.rectangle_intersection_test(ray, rectangle);
+    auto rectangle = std::make_unique<Rectangle>(segment_vector(C, point3D(0,1,0)),segment_vector(C, point3D(0.5f,0,1)), C, Surface(), 1.0f, 1.0f);
+    auto result = rectangle->intersect(ray);
     if(result){
         std::cout << "not null";     
         std::cout << "P: (" 
@@ -217,8 +215,8 @@ TEST(plane_intersection_test, NoIntersectionBehindTheCamera){
     Ray ray = Ray(point3D(), dv);
     point3D C({-5,0,0});
     Scene scene;
-    Rectangle rectangle = Rectangle(segment_vector(C, point3D(0,1,0)),segment_vector(C, point3D(0.5f,0,1)), C, Surface(), 1.0f, 1.0f);
-    auto result = scene.rectangle_intersection_test(ray, rectangle);
+    auto rectangle = std::make_unique<Rectangle>(segment_vector(C, point3D(0,1,0)),segment_vector(C, point3D(0.5f,0,1)), C, Surface(), 1.0f, 1.0f);
+    auto result = rectangle->intersect(ray);
     if(result){
         std::cout << "not null";     
         std::cout << "P: (" 
@@ -238,9 +236,9 @@ TEST(trace, SegmentationFaultTest){
     directional_vector nv({0,1,0});
     Ray ray = Ray(point3D(), dv);
     Scene scene;
-    Infinite_Plane infinite_plane = Infinite_Plane(point3D(0,0,-1), Surface(), 1.0f, 1.0f, nv);
-    auto result = scene.infinite_plane_intersection_test(ray, infinite_plane);
-    scene.add_object(infinite_plane);
+    auto infinite_plane = std::make_unique<Infinite_Plane>(point3D(0,0,-1), Surface(), 1.0f, 1.0f, nv);
+    auto result = infinite_plane->intersect(ray);
+    scene.add_object(std::move(infinite_plane));
     scene.trace(ray);
 }
 

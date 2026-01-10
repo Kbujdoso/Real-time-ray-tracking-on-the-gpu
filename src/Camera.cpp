@@ -34,9 +34,6 @@ Camera::Camera(point3D c, directional_vector d, float f, float a, int w){
 
 
 
-Ray Camera::generate_ray(int x, int y){
-    Ray ray = Ray(coordinate, direction);
-}
 directional_vector Camera::get_direction(){
     return direction;
 }

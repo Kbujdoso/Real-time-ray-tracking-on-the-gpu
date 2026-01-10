@@ -6,10 +6,9 @@
 #include <algorithm>
 #include <cmath>
 #include "Globals.h"
-Renderer::Renderer(Camera c, Scene s){
-    camera = c;
-    scene = s;
-}
+Renderer::Renderer(Camera c, Scene& s) 
+    : camera(c), scene(s)
+{}
 
 
 
@@ -34,7 +33,7 @@ void Renderer::render(){
         for (int j = 0; j < image_height; j++)
         {
             Color color;
-            directional_vector ray_direction = directional_vector(viewport_left_up + one_pixel_right*i - one_pixel_down * j);
+            directional_vector ray_direction = segment_vector(coordinate , viewport_left_up + one_pixel_right*i - one_pixel_down * j).normalize_vector();
             Ray ray = Ray(coordinate, ray_direction);
             auto opt_intersection_data = scene.trace(ray);
             Intersection_data intersection_data;

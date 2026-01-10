@@ -7,11 +7,11 @@
 class Renderer{
     private: 
         Camera camera;
-        Scene scene;
+        Scene& scene;
         Resolution resolution;
     public: 
         Renderer();
-        Renderer(Camera camera, Scene scene);
+        Renderer(Camera camera, Scene& scene);
         void render();
 
 };

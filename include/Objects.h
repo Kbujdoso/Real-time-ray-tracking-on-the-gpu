@@ -4,11 +4,10 @@
 #include "Surface.h"
 #include "ENUMS.h"
 #include <optional>
-
+#include "Globals.h"
+#include "Ray.h"
 class Scene;
-struct Intersection_data;
 class Ray;
-
 
 class Objects{
     protected:
@@ -25,7 +24,7 @@ public:
         Objects(point3D coordinate, Surface surface, float refraction, float reflection);
         virtual ~Objects() {}
         virtual ObjectType type();
-        virtual std::optional<Intersection_data> intersect(Ray ray);
+        virtual std::optional<Intersection_data> intersect(Ray ray) =0;
 };
 
 class Infinite_Plane : public Objects {

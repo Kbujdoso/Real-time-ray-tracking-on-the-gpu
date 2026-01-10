@@ -22,7 +22,7 @@ point3D Ray::O(){
 directional_vector Ray::D(){
     return direction;
 }
-directional_vector Ray::reflection(Objects o){}
+directional_vector Ray::reflection(const Objects& o){}
 
-directional_vector Ray::refraction(Objects o){}
+directional_vector Ray::refraction(const Objects& o){}
 

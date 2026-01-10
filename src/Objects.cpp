@@ -3,7 +3,7 @@
 #include "Surface.h"
 #include "ENUMS.h"
 #include <optional>
-#include "Scene.h"
+#include "Globals.h"
 #include <cmath>
 #include "Ray.h"
 
