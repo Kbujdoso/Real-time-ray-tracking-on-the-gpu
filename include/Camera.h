@@ -23,5 +23,9 @@ class Camera{
         point3D get_coordinate();
         float get_image_width();
         float get_image_height();
-};
+        float get_fov();
+        float get_aspect_ratio();
+        float get_viewport_height();
+        float get_viewport_width();
+    };
 #endif

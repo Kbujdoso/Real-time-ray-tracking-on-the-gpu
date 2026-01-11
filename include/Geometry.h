@@ -43,6 +43,8 @@ point3D operator-(point3D p, directional_vector v);
 point3D operator/(directional_vector v, float scalar);
 point3D operator*(point3D p, float scalar);
 point3D operator*(directional_vector v, float scalar);
+point3D operator+(point3D p1, point3D p2);
+point3D operator-(point3D p1, point3D p2);
 std::array<directional_vector, 2> create_viewport_vectors(const directional_vector& v);
 
 segment_vector cross_product(const directional_vector& v1, const directional_vector& v2);
@@ -51,4 +53,5 @@ float dot_product(const segment_vector&v1, const segment_vector& v2);
 float dot_product(const directional_vector& v1, const directional_vector& v2);
 float magnitude_of_segment_vector(const segment_vector& v);
 
+directional_vector calculate_direction();
 #endif

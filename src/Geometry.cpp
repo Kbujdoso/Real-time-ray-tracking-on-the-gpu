@@ -113,6 +113,12 @@ point3D operator*(directional_vector v, float scalar){
     return point3D(v.x * scalar, v.y * scalar, v.z * scalar);
 }
 
+point3D operator+(point3D p1, point3D p2){
+    return point3D(p1.x+p2.x, p1.y+p2.y, p1.z+p2.z);
+}
+point3D operator-(point3D p1, point3D p2){
+    return point3D(p1.x-p2.x, p1.y-p2.y, p1.z-p2.z);
+}
 point3D operator*(point3D p, float scalar){
     return point3D(p.x * scalar, p.y * scalar, p.z *scalar);
 }
@@ -126,3 +132,4 @@ float dot_product(const segment_vector& v1, const segment_vector& v2){
 float dot_product(const directional_vector& v1, const directional_vector& v2){
     return v1.x*v2.x + v1.y*v2.y + v1.z*v2.z;
 }
+

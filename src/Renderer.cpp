@@ -14,30 +14,41 @@ Renderer::Renderer(Camera c, Scene& s)
 
 
 void Renderer::render(){
+    point3D cam_pos = camera.get_coordinate();
     directional_vector direction = camera.get_direction();
     std::array<directional_vector, 2> helpers = create_viewport_vectors(direction); 
-    directional_vector right = helpers[0];
-    directional_vector up = helpers[1];
+    directional_vector down = helpers[0];
+    directional_vector right = helpers[1];
     float image_height = camera.get_image_height();
     float image_width = camera.get_image_width();
-    point3D coordinate = camera.get_coordinate();
-    point3D viewport_center = coordinate + direction;
-    point3D viewport_left_up = viewport_center + (up / 2.0) - (right / 2.0);
+    float v_height = camera.get_viewport_height(); 
+    float v_width = camera.get_viewport_width();
+    point3D viewport_center = cam_pos + direction; 
+
+
+    point3D viewport_left_up = viewport_center 
+                            - (right * (v_width / 2.0f)) 
+                            - (down* (v_height / 2.0f));    
     point3D one_pixel_right = right / image_width;
-    point3D one_pixel_down = up / image_height;
+
+    directional_vector pixel_delta_right = (right* v_width) / image_width;
+    directional_vector pixel_delta_down = (down* v_height) / image_height;
     std::ofstream out("output.ppm");
     out << "P3\n" << image_width << " " << image_height << "\n255\n";
 
-    for(int i = 0;i < image_width; i++)
+    for(int i = 0;i < image_height; i++)
     {
-        for (int j = 0; j < image_height; j++)
+        for (int j = 0; j < image_width; j++)
         {
             Color color;
-            directional_vector ray_direction = segment_vector(coordinate , viewport_left_up + one_pixel_right*i - one_pixel_down * j).normalize_vector();
-            Ray ray = Ray(coordinate, ray_direction);
+            point3D pixel_center = viewport_left_up 
+                               + (pixel_delta_right * (j + 0.5f)) 
+                               + (pixel_delta_down * (i + 0.5f)); 
+            directional_vector ray_direction = segment_vector(cam_pos ,pixel_center).normalize_vector();
+            Ray ray = Ray(cam_pos, ray_direction);
             auto opt_intersection_data = scene.trace(ray);
             Intersection_data intersection_data;
-            if (opt_intersection_data) {
+            if (opt_intersection_data != std::nullopt) {
                 intersection_data = *opt_intersection_data; 
                 color = intersection_data.Surface_data().Surface_color();
             } else {
