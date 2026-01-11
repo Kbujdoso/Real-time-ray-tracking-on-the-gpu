@@ -28,8 +28,7 @@ void Renderer::render(){
 
     point3D viewport_left_up = viewport_center 
                             - (right * (v_width / 2.0f)) 
-                            - (down* (v_height / 2.0f));    
-    point3D one_pixel_right = right / image_width;
+                            - (down * (v_height / 2.0f));    
 
     directional_vector pixel_delta_right = (right* v_width) / image_width;
     directional_vector pixel_delta_down = (down* v_height) / image_height;
@@ -44,7 +43,7 @@ void Renderer::render(){
             point3D pixel_center = viewport_left_up 
                                + (pixel_delta_right * (j + 0.5f)) 
                                + (pixel_delta_down * (i + 0.5f)); 
-            directional_vector ray_direction = segment_vector(cam_pos ,pixel_center).normalize_vector();
+            directional_vector ray_direction = segment_vector(cam_pos, pixel_center).normalize_vector();
             Ray ray = Ray(cam_pos, ray_direction);
             auto opt_intersection_data = scene.trace(ray);
             Intersection_data intersection_data;
