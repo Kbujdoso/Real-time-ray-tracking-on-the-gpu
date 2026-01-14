@@ -33,14 +33,15 @@ struct directional_vector{
     float x;
     float y; 
     float z;
-    directional_vector();
-    directional_vector(point3D p);
+    explicit directional_vector();
+    explicit directional_vector(point3D p);
     segment_vector multiply_directional_vector(float x);
 };
 
 point3D operator+(point3D p, directional_vector v);
 point3D operator-(point3D p, directional_vector v);
 point3D operator/(directional_vector v, float scalar);
+point3D operator/(point3D p, float scalar);
 point3D operator*(point3D p, float scalar);
 point3D operator*(directional_vector v, float scalar);
 point3D operator+(point3D p1, point3D p2);

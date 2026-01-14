@@ -109,6 +109,9 @@ point3D operator-(point3D p,  directional_vector v){
 point3D operator/(directional_vector v, float scalar){
     return point3D(v.x / scalar, v.y / scalar, v.z / scalar);
 }
+point3D operator/(point3D v, float scalar){
+    return point3D(v.x / scalar, v.y / scalar, v.z / scalar);
+}
 point3D operator*(directional_vector v, float scalar){
     return point3D(v.x * scalar, v.y * scalar, v.z * scalar);
 }

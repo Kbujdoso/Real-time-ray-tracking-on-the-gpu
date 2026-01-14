@@ -34,7 +34,7 @@ int main(){
     Renderer renderer = Renderer(camera, scene);
     renderer.render();
 */ 
-    Color something = Color(230.2f, 230.2f, 230.2f);
+    Color something = Color(1.7f, 0.2f, 0.6f);
     Color something2 = Color(0.2f, 10.2f, 5.2f);
     Scene scene;
     Surface base = Surface(something, 1.0f, 5.0f);
@@ -42,8 +42,8 @@ int main(){
     auto sphere = std::make_unique<Sphere>(2.0f, point3D(0.0f, 0.0f, 2.0f), base, 5.0f, 5.0f);
     point3D rectangle_CO = point3D(0.0f, 0.0f, 1.0f);
 
-    Camera camera = Camera(point3D(0,0,-3), Z_AXIS, 90.0f, 4.0f /3.0f, 1080);
-    auto light = std::make_unique<Point_Light>(point3D(0.0f, 5.0f, 2.0f), 30.0f);    
+    Camera camera = Camera(point3D(0.0f, 0.0f, -3.0f), Z_AXIS, 90.0f, 4.0f /3.0f, 1080);
+    auto light = std::make_unique<Point_Light>(point3D(0.0f, 5.0f, 2.0f), 50.0f);    
     scene.add_light(std::move(light));
     scene.add_object(std::move(sphere));
     Renderer renderer = Renderer(camera, scene);

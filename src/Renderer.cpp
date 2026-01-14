@@ -29,9 +29,10 @@ void Renderer::render(){
     point3D viewport_left_up = viewport_center 
                             - (right * (v_width / 2.0f)) 
                             - (down * (v_height / 2.0f));    
-
-    directional_vector pixel_delta_right = (right* v_width) / image_width;
-    directional_vector pixel_delta_down = (down* v_height) / image_height;
+    point3D pixel_right  = right * v_width;
+    point3D pixel_down = down * v_height;
+    point3D pixel_delta_right = pixel_right / image_width;
+    point3D pixel_delta_down = pixel_down / image_height;
     std::ofstream out("output.ppm");
     out << "P3\n" << image_width << " " << image_height << "\n255\n";
 
@@ -41,8 +42,8 @@ void Renderer::render(){
         {
             Color color;
             point3D pixel_center = viewport_left_up 
-                               + (pixel_delta_right * (j + 0.5f)) 
-                               + (pixel_delta_down * (i + 0.5f)); 
+                               + (pixel_delta_right * j) 
+                               + (pixel_delta_down * i); 
             directional_vector ray_direction = segment_vector(cam_pos, pixel_center).normalize_vector();
             Ray ray = Ray(cam_pos, ray_direction);
             auto opt_intersection_data = scene.trace(ray);
