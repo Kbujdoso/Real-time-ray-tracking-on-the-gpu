@@ -21,3 +21,17 @@ Color operator*(Color color, float scalar){
     float blue = color.Blue() * scalar;
     return Color(red, blue, green);
 }
+
+Color operator*(Color c1, Color c2){
+    float red = c1.Red()*c2.Red();
+    float green = c1.Green()*c2.Green();
+    float blue = c1.Blue()*c2.Blue();
+    return Color(red, blue, green);
+}
+
+Color operator+(Color c1, Color c2){
+    float red = c1.Red()+c2.Red();
+    float green = c1.Green()+c2.Green();
+    float blue = c1.Blue()+c2.Blue();
+    return Color(red, blue, green);
+}

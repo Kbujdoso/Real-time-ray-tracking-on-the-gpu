@@ -14,10 +14,11 @@ float tone(float x) {
 
 Intersection_data::Intersection_data(){
 }
-Intersection_data::Intersection_data(Surface S, point3D P, float T){
+Intersection_data::Intersection_data(Surface S, point3D P, float T, directional_vector N){
     surface = S;
     p = P;
     t = T;
+    normal_vector = N;
 }
 Surface Intersection_data::Surface_data(){
     return surface;
@@ -27,4 +28,7 @@ point3D Intersection_data::C(){
 }
 float Intersection_data::T(){
     return t;
+}
+directional_vector Intersection_data::get_normal_vector(){
+    return normal_vector;
 }

@@ -6,8 +6,8 @@
 #include <algorithm>
 #include <cmath>
 #include "Globals.h"
-Renderer::Renderer(Camera c, Scene& s) 
-    : camera(c), scene(s)
+Renderer::Renderer(Camera c, Scene& s, Point_Light l) 
+    : camera(c), scene(s), light(l)
 {}
 
 
@@ -42,22 +42,22 @@ void Renderer::render(){
         {
             Color color;
             point3D pixel_center = viewport_left_up 
-                               + (pixel_delta_right * j) 
-                               + (pixel_delta_down * i); 
+                            + (pixel_delta_right * j) 
+                            + (pixel_delta_down * i);
             directional_vector ray_direction = segment_vector(cam_pos, pixel_center).normalize_vector();
             Ray ray = Ray(cam_pos, ray_direction);
             auto opt_intersection_data = scene.trace(ray);
             Intersection_data intersection_data;
             if (opt_intersection_data != std::nullopt) {
                 intersection_data = *opt_intersection_data; 
-                color = intersection_data.Surface_data().Surface_color();
+                color = illuminate(intersection_data, light ,scene);
             } else {
-                color = Color();
+                color = Color(30.0f, 30.0f, 30.0f);
             }
 
-            int r = std::round(tone(color.Red())   * 255);
-            int g = std::round(tone(color.Green()) * 255);
-            int b = std::round(tone(color.Blue())  * 255);
+            int r = std::round((color.Red()));
+            int g = std::round(color.Green());
+            int b = std::round(color.Blue());
             out << r << " " << g << " " << b << "\n";
         }
 

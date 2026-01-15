@@ -14,4 +14,6 @@ class Color{
 
     };
     Color operator*(Color color, float scalar);
+    Color operator*(Color color1, Color color2);
+    Color operator+(Color color1, Color color2);
 #endif

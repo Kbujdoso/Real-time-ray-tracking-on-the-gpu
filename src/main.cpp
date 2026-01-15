@@ -14,38 +14,15 @@
 #include <cmath>
 
 int main(){
-/*   Color gray = Color(200, 200, 200);
-    Scene scene;
-    point3D rectangle_CO = point3D(0.0f, 0.0f, 1.0f);
-    Surface base = Surface(gray, 3.0f, 5.0f);
-    auto sphere = std::make_unique<Sphere>(2.0f, point3D(0.0f, 0.0f, 5.0f), base, 5.0f, 5.0f);
-    auto rectangle = std::make_unique<Rectangle>(segment_vector(rectangle_CO, 
-        point3D(5.0f, 1.0f, 0.0f))
-        ,segment_vector(rectangle_CO,
-             point3D(0.0f, 1.0f, 5.0f)),
-              point3D(1.0f, 0.0f, 0.0f),
-               base, 5.0f, 5.0f);
-
-    Camera camera = Camera(point3D(), Z_AXIS, 90.0f, 4/3, 1080);
-    auto light = std::make_unique<Point_Light>(point3D(5.0f, 5.0f, 0.0f), 5.0f);    
-    scene.add_light(std::move(light));
-    scene.add_object(std::move(rectangle));
-    scene.add_object(std::move(sphere));
-    Renderer renderer = Renderer(camera, scene);
-    renderer.render();
-*/ 
-    Color something = Color(230.2f, 230.2f, 230.2f);
-    Color something2 = Color(0.2f, 10.2f, 5.2f);
+    Color something = Color(200.2f, 100.2f, 64.2f);
     Scene scene;
     Surface base = Surface(something, 1.0f, 5.0f);
-    Surface base2 = Surface(something2, 1.0f, 5.0f);
-    auto sphere = std::make_unique<Sphere>(2.0f, point3D(0.0f, 0.0f, 2.0f), base, 5.0f, 5.0f);
+    auto sphere = std::make_unique<Sphere>(3.0f, point3D(0.0f, 0.0f, 2.0f), base, 5.0f, 5.0f);
     point3D rectangle_CO = point3D(0.0f, 0.0f, 1.0f);
 
     Camera camera = Camera(point3D(0,0,-3), Z_AXIS, 90.0f, 4.0f /3.0f, 1080);
-    auto light = std::make_unique<Point_Light>(point3D(0.0f, 5.0f, 2.0f), 30.0f);    
-    scene.add_light(std::move(light));
+    auto light = Point_Light(point3D(5.0f, 10.0f, 2.0f), 5.0f, Color(20.0f, 20.0f, 20.0f));    
     scene.add_object(std::move(sphere));
-    Renderer renderer = Renderer(camera, scene);
+    Renderer renderer = Renderer(camera, scene, light);
     renderer.render();
 }

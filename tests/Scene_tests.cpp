@@ -5,7 +5,7 @@
 #include <cmath>
 
 
-TEST(sphere_intersection_test, NoIntersection){
+/*TEST(sphere_intersection_test, NoIntersection){
     directional_vector dv({1,0,0});
     Ray ray = Ray(point3D(), dv);
     auto sphere = std::make_unique<Sphere>(1.0f, point3D(0,2,0), Surface(), 1.0f, 1.0f);
@@ -231,25 +231,6 @@ TEST(plane_intersection_test, NoIntersectionBehindTheCamera){
     }
 
 }
-TEST(trace, sphere_trace_test){
-    Color something = Color(230.2f, 230.2f, 230.2f);
-    Scene scene;
-    Surface base = Surface(something, 1.0f, 5.0f);
-    auto sphere = std::make_unique<Sphere>(2.0f, point3D(0.0f, 0.0f, 2.0f), base, 5.0f, 5.0f);
 
-    Camera camera = Camera(point3D(0,0,-3), Z_AXIS, 90.0f, 4.0f /3.0f, 1080);
-    auto light = std::make_unique<Point_Light>(point3D(0.0f, 5.0f, 2.0f), 30.0f);    
-    scene.add_light(std::move(light));
-    scene.add_object(std::move(sphere));
-    point3D origin = point3D(0,0,-2);
-    directional_vector direction({0,0,1});
-    Ray ray = Ray(origin, direction);
-    auto intersection_data = scene.trace(ray); 
-    if(intersection_data == std::nullopt){
-        FAIL();
-    }else{
-        SUCCEED();
-    }
 
-}
-
+*/

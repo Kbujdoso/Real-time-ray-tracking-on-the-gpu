@@ -28,10 +28,10 @@ class Point_Light : public Light{
         float intensity;
     public:
         Point_Light();
-        Point_Light(point3D Coordinate, float Intensity);
+        Point_Light(point3D Coordinate, float Intensity, Color color);
         point3D C();
         float get_intensity();
         Color get_color();
     };
-    Color illuminate(Intersection_data data, Point_Light light, Scene scene);
+    Color illuminate(Intersection_data data, Point_Light light, Scene& scene);
     #endif

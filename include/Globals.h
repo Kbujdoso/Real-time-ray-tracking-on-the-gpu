@@ -14,11 +14,13 @@ struct Intersection_data{
         Surface surface;
         point3D p;
         float t;
+        directional_vector normal_vector;
     public:
         Intersection_data();
-        Intersection_data(Surface S, point3D P, float T);
+        Intersection_data(Surface S, point3D P, float T, directional_vector N);
         Surface Surface_data();
         point3D C();
         float T();
+        directional_vector get_normal_vector();
 };
 #endif

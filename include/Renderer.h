@@ -9,9 +9,10 @@ class Renderer{
         Camera camera;
         Scene& scene;
         Resolution resolution;
+        Point_Light light;
     public: 
         Renderer();
-        Renderer(Camera camera, Scene& scene);
+        Renderer(Camera camera, Scene& scene, Point_Light light);
         void render();
 
 };
