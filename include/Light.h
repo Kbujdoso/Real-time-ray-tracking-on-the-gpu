@@ -9,10 +9,10 @@ class Point_Light;
 class Light{
     protected:
         Color color;
-        virtual Color illuminate(Intersection_data data, Point_Light light, Scene scene);
-    public:
+        public:
         Light();
         Light(Color color);
+    public:
 };
 class Directional_Light : public Light{
     private:
@@ -31,5 +31,7 @@ class Point_Light : public Light{
         Point_Light(point3D Coordinate, float Intensity);
         point3D C();
         float get_intensity();
-};
-#endif
+        Color get_color();
+    };
+    Color illuminate(Intersection_data data, Point_Light light, Scene scene);
+    #endif

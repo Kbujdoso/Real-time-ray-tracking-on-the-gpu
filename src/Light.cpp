@@ -37,10 +37,14 @@ point3D Point_Light::C(){
 float Point_Light::get_intensity(){
     return intensity;
 }
+Color Point_Light::get_color(){
+    return color;
+}
 
-Color Light::illuminate(Intersection_data data, Point_Light light, Scene scene){
+Color illuminate(Intersection_data data, Point_Light light, Scene scene){
     point3D c = data.C();
     point3D light_c = light.C();
+    Color color = light.get_color();
     directional_vector direction = segment_vector(c, light_c).normalize_vector();
     Ray shadowRay(c + (direction * 0.001f), direction);
     float distance_to_light = magnitude_of_segment_vector(segment_vector(c, light_c));
