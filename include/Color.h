@@ -3,11 +3,11 @@
 class Color{
     private:
         int red;
-        int blue; 
         int green;
+        int blue; 
     public: 
         Color();
-        Color(int red, int blue, int green);
+        Color(int red, int green, int blue);
         int Red();
         int Blue();
         int Green();

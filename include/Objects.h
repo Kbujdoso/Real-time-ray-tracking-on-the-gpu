@@ -33,7 +33,6 @@ class Infinite_Plane : public Objects {
     public:
     Infinite_Plane();
     Infinite_Plane(point3D coordinate, Surface surface, float refraction, float reflection, directional_vector normal_vector);
-    directional_vector D();
     directional_vector N();
     ObjectType type() override;
     std::optional<Intersection_data> intersect(Ray ray) override;
