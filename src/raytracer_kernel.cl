@@ -75,8 +75,8 @@ GPU_Intersection_data intersect_rectangle(GPU_Object rectangle, Ray ray){
         return gpu_int;
     } 
 
-    float3 OC = rectangle.position.xyz - ray.origin.xyz;
-    float t = dot(normal.xyz, OC)/dot(ray.direction.xyz, normal.xyz);
+    float3 CO = rectangle.position.xyz - ray.origin.xyz;
+    float t = dot(normal.xyz, CO)/dot(ray.direction.xyz, normal.xyz);
     if (t < 0.0f ){ // if t < 0 then the object is behind the camera
         return gpu_int;
     }
@@ -96,3 +96,21 @@ GPU_Intersection_data intersect_rectangle(GPU_Object rectangle, Ray ray){
 
 }
 
+GPU_Intersection_data intersect_infiniteplane(GPU_Object infinite_plane ,Ray ray){
+    bool parallel = fabs(dot(ray.direction.xyz, infinite_plane.normal.xyz)) < 1e-6f;
+    GPU_Intersection_data gpu_int;
+    gpu_int.exists = false;
+    if(parallel){ //if its paralel there is no intersection
+        return gpu_int; }
+    float3 OC_vector = infinite_plane.position.xyz - ray.origin.xyz;
+    float t = dot(infinite_plane.normal.xyz, OC_vector)/dot(ray.direction.xyz, infinite_plane.normal.xyz);
+    if (t < 0 ){ // if t < 0 the object is behind the camera
+        return gpu_int; }
+    gpu_int.exists = true;
+    gpu_int.t = t;
+    gpu_int.position = ray.origin.xyz + t * ray.direction.xyz;
+    gpu_int.normal = infinite_plane.normal.xyz;
+    gpu_int.color = infinite_plane.color.xyz;
+    return gpu_int;
+    
+}
