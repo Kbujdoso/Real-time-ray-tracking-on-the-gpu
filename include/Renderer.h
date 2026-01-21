@@ -19,6 +19,7 @@ class Renderer{
         GPU_Camera prepareCameraForGPU();
         GPU_Light prepareLightForGPU();
         void render();
+        void new_render();
 
 };
 

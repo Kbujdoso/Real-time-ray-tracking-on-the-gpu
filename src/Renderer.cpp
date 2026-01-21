@@ -1,13 +1,19 @@
-#include "Renderer.h"
-#include <array>
-#include "Geometry.h"
-#include "Scene.h"
+#define CL_HPP_TARGET_OPENCL_VERSION 300 
+#include <CL/opencl.hpp>
+#include <string>
+#include <iostream>
 #include <fstream>
+#include <sstream>
+#include <array>
 #include <algorithm>
 #include <cmath>
-#include "Globals.h"
 #include <vector>
-#include <GPU_Struct.h>
+
+#include "GPU_Struct.h"
+#include "Renderer.h"
+#include "Geometry.h"
+#include "Scene.h"
+#include "Globals.h"
 Renderer::Renderer(Camera c, Scene& s, Point_Light l) 
     : camera(c), scene(s), light(l)
 {}
@@ -157,4 +163,48 @@ void Renderer::render(){
 
     }
     out.close();
+}
+void Renderer::new_render(){
+    
+    std::vector<cl::Platform> platforms;
+    cl::Platform::get(&platforms);
+    cl::Platform default_platform = platforms[0];
+    
+    std::vector<cl::Device> all_devices;
+    default_platform.getDevices(CL_DEVICE_TYPE_ALL, &all_devices);
+    cl::Device default_device = all_devices[0];
+    
+    cl::Context context({default_device});
+    
+    std::vector<GPU_Object> objects_h = prepareSceneForGPU();
+    GPU_Camera camera_h = prepareCameraForGPU();
+    GPU_Light light_h = prepareLightForGPU();
+
+    cl::Buffer objects_d(context, CL_MEM_READ_ONLY, objects_h.size()*sizeof(GPU_Object));
+    cl::Buffer camera_d(context, CL_MEM_READ_ONLY, sizeof(GPU_Camera));
+    cl::Buffer light_d(context, CL_MEM_READ_ONLY, sizeof(GPU_Light));
+
+    cl::CommandQueue queue(context, default_device);
+
+    queue.enqueueWriteBuffer(objects_d, CL_TRUE, 0, objects_h.size()*sizeof(GPU_Object), objects_h.data());
+    queue.enqueueWriteBuffer(camera_d, CL_TRUE, 0, sizeof(GPU_Camera), &camera_h);
+    queue.enqueueWriteBuffer(light_d, CL_TRUE, 0, sizeof(GPU_Light), &light_h);
+
+    std::ifstream kernelFile("raytracer_kernel.cl");
+    std::stringstream buffer;
+       buffer << kernelFile.rdbuf();
+
+    std::string kernel_code = buffer.str();
+    
+    cl::Program::Sources sources;
+    sources.push_back({kernel_code.c_str(), kernel_code.length()});
+
+    cl::Program program(context, sources);
+
+    if (program.build({ default_device }) != CL_SUCCESS) {
+        std::cout << " Error building: " << program.getBuildInfo<CL_PROGRAM_BUILD_LOG>(default_device) << "\n";
+        exit(1);
+    }
+
+
 }
