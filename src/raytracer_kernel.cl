@@ -18,17 +18,10 @@ typedef struct{
     float3 position;
     float3 color;
 } GPU_Intersection_data;
-__kernel void trace(){
-
-}
-void trace_ray(const float t){
-
-}
-__kernel void illuminate(){}
 
 __kernel void kernel_render(){}
 
-GPU_Intersection_data intersect_sphere(const GPU_Object sphere, Ray ray) {
+GPU_Intersection_data intersect_sphere(const GPU_Object sphere, const Ray ray) {
     GPU_Intersection_data gpu_int;
     gpu_int.exists = false;
 
@@ -63,7 +56,7 @@ GPU_Intersection_data intersect_sphere(const GPU_Object sphere, Ray ray) {
     gpu_int.color = sphere.color.xyz;
     return gpu_int;
 }
-GPU_Intersection_data intersect_rectangle(GPU_Object rectangle, Ray ray){
+GPU_Intersection_data intersect_rectangle(const GPU_Object rectangle, const Ray ray){
     GPU_Intersection_data gpu_int;
     gpu_int.exists = false;
     const float eps = 0.001f; 
@@ -96,7 +89,7 @@ GPU_Intersection_data intersect_rectangle(GPU_Object rectangle, Ray ray){
 
 }
 
-GPU_Intersection_data intersect_infiniteplane(GPU_Object infinite_plane ,Ray ray){
+GPU_Intersection_data intersect_infiniteplane(const GPU_Object infinite_plane , const Ray ray){
     bool parallel = fabs(dot(ray.direction.xyz, infinite_plane.normal.xyz)) < 1e-6f;
     GPU_Intersection_data gpu_int;
     gpu_int.exists = false;
@@ -111,6 +104,67 @@ GPU_Intersection_data intersect_infiniteplane(GPU_Object infinite_plane ,Ray ray
     gpu_int.position = ray.origin.xyz + t * ray.direction.xyz;
     gpu_int.normal = infinite_plane.normal.xyz;
     gpu_int.color = infinite_plane.color.xyz;
-    return gpu_int;
-    
+    return gpu_int;  
 }
+
+GPU_Intersection_data trace(const Ray ray, __global GPU_Object* objects, int num_objects){
+    GPU_Intersection_data closest_hit = {};
+    closest_hit.exists = false;
+    float min_t = INFINITY;
+    for (int i  = 0; i < num_objects; i++) {
+        GPU_Intersection_data current_hit = {};
+
+        GPU_Object object = objects[i];
+        switch(object.type){
+            case 0:
+                current_hit = intersect_infiniteplane(object, ray);
+            break;
+            case 1:
+                current_hit = intersect_rectangle(object, ray);
+            break;
+            case 2:
+                current_hit = intersect_sphere(object, ray);
+            break;
+
+        }
+
+        if (current_hit.exists) {
+
+            if (current_hit.t < min_t) {
+                min_t = current_hit.t;
+                closest_hit = current_hit;
+            }
+        }
+    }
+
+    return closest_hit;
+}
+
+
+    float3 illuminate(GPU_Intersection_data data, GPU_Light light, __global GPU_Object* objects, int num_objects){
+    float3 position = data.position;
+    float3 light_position = light.position.xyz;
+    float3 light_color = light.color.xyz;
+    float3 object_color = data.color;
+    float3 normal = data.normal;    
+
+    float3 L_dir = normalize(light_position - position);
+    float distance_to_light = distance(position, light_position);
+
+    Ray shadowRay = {};
+    shadowRay.origin.xyz = position + normal * 0.001f;
+    shadowRay.direction.xyz = L_dir;
+    GPU_Intersection_data gpu_int = {};
+    gpu_int = trace(shadowRay, objects, num_objects);
+    float3 ambient = object_color * 0.1f;
+
+    if (gpu_int.exists && gpu_int.t < distance_to_light) {
+        
+        return ambient; 
+    }
+    float cos_theta = max(0.0f, dot(normal, L_dir));
+    float intensity = light.intensity;
+    float attenuation = intensity / (1.0f + distance_to_light * distance_to_light);
+    float3 diffuse = (object_color * light_color) * (cos_theta * attenuation);
+    return ambient + diffuse;
+ }

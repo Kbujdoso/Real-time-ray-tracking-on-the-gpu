@@ -205,6 +205,8 @@ void Renderer::new_render(){
         std::cout << " Error building: " << program.getBuildInfo<CL_PROGRAM_BUILD_LOG>(default_device) << "\n";
         exit(1);
     }
-
+    cl::Kernel kernel(program, "render_kernel");
+    int num_objects = static_cast<int>(objects_h.size());
+    kernel.setArg(1, num_objects);    
 
 }
