@@ -27,7 +27,7 @@ class Scene{
 
         void add_object(std::unique_ptr<Objects> object);
         void remove_object(std::unique_ptr<Objects> object);
-        std::vector<std::unique_ptr<Objects>> get_Objects();
+        std::vector<std::unique_ptr<Objects>>& get_Objects();
 
         void add_light(std::unique_ptr<Light> light);
         void remove_light(std::unique_ptr<Light> light);

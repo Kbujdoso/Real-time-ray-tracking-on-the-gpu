@@ -55,3 +55,7 @@ void Scene::clear_all(){
     lights.clear();
 }
 
+std::vector<std::unique_ptr<Objects>>& Scene::get_Objects() {
+    return objects;
+}
+

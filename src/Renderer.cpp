@@ -205,8 +205,48 @@ void Renderer::new_render(){
         std::cout << " Error building: " << program.getBuildInfo<CL_PROGRAM_BUILD_LOG>(default_device) << "\n";
         exit(1);
     }
-    cl::Kernel kernel(program, "render_kernel");
+    size_t num_pixels = camera_h.image_width * camera_h.image_height;
+    std::vector<cl_float3> image_h(num_pixels);
+    
+    cl::Buffer output_d(context, CL_MEM_WRITE_ONLY, sizeof(cl_float3) * num_pixels);
+    cl::Kernel kernel(program, "kernel_render");
     int num_objects = static_cast<int>(objects_h.size());
-    kernel.setArg(1, num_objects);    
+    
+    kernel.setArg(0, output_d);
+    kernel.setArg(1, camera_h);  
+    kernel.setArg(2, light_h);
+    kernel.setArg(3, objects_d);
+    kernel.setArg(4, num_objects); 
 
+
+    cl::NDRange global_size(camera_h.image_width, camera_h.image_height);
+
+    queue.enqueueNDRangeKernel(kernel, cl::NullRange, global_size, cl::NullRange);
+
+    queue.enqueueReadBuffer(output_d, CL_TRUE, 0, sizeof(cl_float3) * num_pixels, image_h.data());
+
+
+    std::ofstream out("output.ppm");
+    if (!out.is_open()) {
+        std::cerr << "Error writing file" << std::endl;
+        return;
+    }
+
+    out << "P3\n" << camera_h.image_width << " " << camera_h.image_height << "\n255\n";
+
+    for (size_t i = 0; i < num_pixels; ++i) {
+        
+        int r = static_cast<int>(std::clamp(image_h[i].s[0], 0.0f, 255.0f));
+        int g = static_cast<int>(std::clamp(image_h[i].s[1], 0.0f, 255.0f));
+        int b = static_cast<int>(std::clamp(image_h[i].s[2], 0.0f, 255.0f));
+
+        out << r << " " << g << " " << b << "\n";
+        
+        if (i % (static_cast<int>(camera_h.image_width) * 10) == 0) {
+            std::cout << "\rMentés: " << (i * 100 / num_pixels) << "%" << std::flush;
+        }
+    }
+
+    out.close();
+    std::cout << "\nDone, picture: output.ppm" << std::endl;
 }

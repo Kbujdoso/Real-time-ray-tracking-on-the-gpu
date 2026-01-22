@@ -1,4 +1,3 @@
-#include "GPU_Struct.h"
 typedef struct{
     int red;
     int green;
@@ -19,6 +18,36 @@ typedef struct{
     float3 color;
 } GPU_Intersection_data;
 
+typedef struct {
+    int type; 
+    float radius;
+    float reflection;   
+    float shineness;
+    float4 normal;
+    float4 u;
+    float4 v; 
+    float4 color;
+    float4 position;
+} GPU_Object;
+
+typedef struct{
+    float4 position;
+    float4 direction;
+    float4 view_port_left_up;
+    float4 pixel_delta_right;
+    float4 pixel_delta_down;
+    float image_height;
+    float image_width;
+    float dummy1;
+    float dummy2;
+} GPU_Camera;
+
+typedef struct{
+    float4 position;
+    float4 color;
+    float intensity;
+    float dummy[3];
+} GPU_Light;
 
 GPU_Intersection_data intersect_sphere(const GPU_Object sphere, const Ray ray) {
     GPU_Intersection_data gpu_int;

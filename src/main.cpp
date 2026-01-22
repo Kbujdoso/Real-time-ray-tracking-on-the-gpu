@@ -24,5 +24,5 @@ int main(){
     auto light = Point_Light(point3D(5.0f, 10.0f, 2.0f), 5.0f, Color(20.0f, 20.0f, 20.0f));    
     scene.add_object(std::move(sphere));
     Renderer renderer = Renderer(camera, scene, light);
-    renderer.render();
+    renderer.new_render();
 }

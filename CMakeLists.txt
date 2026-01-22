@@ -1,10 +1,15 @@
 cmake_minimum_required(VERSION 3.10.0)
 project(Ray_tracing)
+
 set(CMAKE_CXX_STANDARD 17)
-include_directories(${PROJECT_SOURCE_DIR}/include)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+find_package(OpenCL REQUIRED)
+
+include_directories(${PROJECT_SOURCE_DIR}/include ${OpenCL_INCLUDE_DIRS})
+
 #--------------------------
-#Set sources
+# Set sources
 #--------------------------
 
 set(SOURCES
@@ -21,30 +26,23 @@ set(SOURCES
     src/Scene.cpp
     src/Surface.cpp
 )
-#Main executable
-add_executable(raytracer ${SOURCES})
 
+configure_file(src/raytracer_kernel.cl ${CMAKE_CURRENT_BINARY_DIR}/raytracer_kernel.cl COPYONLY)
+
+# Main executable
+add_executable(raytracer ${SOURCES})
+target_link_libraries(raytracer PRIVATE OpenCL::OpenCL)
 
 # --------------------------
 # Build library from sources for tests
 # --------------------------
 
-add_library(raytracer_lib
-    src/Camera.cpp
-    src/Color.cpp
-    src/Geometry.cpp
-    src/Globals.cpp
-    src/Light.cpp
-    src/Objects.cpp
-    src/Ray.cpp
-    src/Renderer.cpp
-    src/Resolution.cpp
-    src/Scene.cpp
-    src/Surface.cpp
-)
+add_library(raytracer_lib STATIC ${SOURCES})
+# A teszt könyvtárnak is kell az OpenCL elérés
+target_link_libraries(raytracer_lib PUBLIC OpenCL::OpenCL)
 
 #--------------------------
-#Google tests
+# Google tests
 #--------------------------
 
 include(FetchContent)
