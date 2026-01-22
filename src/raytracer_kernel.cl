@@ -19,7 +19,6 @@ typedef struct{
     float3 color;
 } GPU_Intersection_data;
 
-__kernel void kernel_render(){}
 
 GPU_Intersection_data intersect_sphere(const GPU_Object sphere, const Ray ray) {
     GPU_Intersection_data gpu_int;
@@ -141,7 +140,7 @@ GPU_Intersection_data trace(const Ray ray, __global GPU_Object* objects, int num
 }
 
 
-    float3 illuminate(GPU_Intersection_data data, GPU_Light light, __global GPU_Object* objects, int num_objects){
+float3 illuminate(GPU_Intersection_data data, GPU_Light light, __global GPU_Object* objects, int num_objects){
     float3 position = data.position;
     float3 light_position = light.position.xyz;
     float3 light_color = light.color.xyz;
@@ -168,3 +167,27 @@ GPU_Intersection_data trace(const Ray ray, __global GPU_Object* objects, int num
     float3 diffuse = (object_color * light_color) * (cos_theta * attenuation);
     return ambient + diffuse;
  }
+
+
+
+__kernel void kernel_render(__global float3* output_image, GPU_Camera camera, GPU_Light light, __global GPU_Object* objects, int num_objects){
+    int j = get_global_id(0);
+    int i = get_global_id(1);
+    if ( j >= camera.image_width || i >= camera.image_height)return;
+    float3 pixel_center = camera.view_port_left_up.xyz 
+                        + (camera.pixel_delta_right.xyz * (float)j) 
+                        + (camera.pixel_delta_down.xyz * (float)i);
+    float3 ray_direction = normalize(pixel_center -camera.position.xyz);
+    Ray ray = {};
+    ray.origin.xyz = camera.position.xyz;
+    ray.direction.xyz = ray_direction;
+    GPU_Intersection_data intersection_data = trace(ray, objects, num_objects); 
+    float3 final_color;
+    if (intersection_data.exists) {
+        final_color = illuminate(intersection_data, light, objects, num_objects);
+    } else {
+        final_color = (float3)(30.0f, 30.0f, 30.0f);
+    }
+    int pixel_index = i * camera.image_width + j;
+    output_image[pixel_index] = final_color;
+}
